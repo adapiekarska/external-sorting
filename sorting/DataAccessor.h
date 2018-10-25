@@ -13,12 +13,15 @@ public:
 	/**
 	Gets next record from the file.
 	*/
-	int_vec get_next();
+	int32_vec get_next();
 
 private:
 	std::ifstream ifs;
 	const int BUFFER_SIZE = 5;
-	std::vector<int_vec> buffer;
+	std::vector<int32_vec> buffer;
 
+	/**
+	Loads records into the buffer.
+	*/
 	void load();
 };

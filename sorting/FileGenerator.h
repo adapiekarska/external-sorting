@@ -10,7 +10,7 @@ public:
 	FileGenerator(std::string path);
 	~FileGenerator();
 
-	void write(std::vector<int_vec> &v);
+	void write(std::vector<int32_vec> &v);
 
 private:
 	std::string path;

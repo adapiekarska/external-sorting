@@ -1,7 +1,7 @@
 #include "FileGenerator.h"
 
 
-void FileGenerator::write(std::vector<int_vec> &v)
+void FileGenerator::write(std::vector<int32_vec> &v)
 {
 	std::ofstream ofs(this->path, std::ios::binary);
 

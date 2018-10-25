@@ -13,7 +13,7 @@ public:
 	Generates the vector of size n that contains randomly
 	generated pairs of integers.
 	*/
-	std::vector<int_vec> generate(size_t n) const;
+	std::vector<int32_vec> generate(size_t n) const;
 
 	DataGenerator();
 	~DataGenerator();

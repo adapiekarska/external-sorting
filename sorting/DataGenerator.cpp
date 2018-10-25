@@ -2,9 +2,9 @@
 
 
 
-std::vector<int_vec> DataGenerator::generate(size_t n) const
+std::vector<int32_vec> DataGenerator::generate(size_t n) const
 {
-	std::vector<int_vec> data;
+	std::vector<int32_vec> data;
 
 	std::random_device rd;
 	std::mt19937 eng(rd());
@@ -12,7 +12,7 @@ std::vector<int_vec> DataGenerator::generate(size_t n) const
 
 	while (n--)
 	{
-		data.push_back(int_vec(distr(eng), distr(eng)));
+		data.push_back(int32_vec(distr(eng), distr(eng)));
 	}
 
 	return data;

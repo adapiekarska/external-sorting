@@ -8,7 +8,7 @@
 int main()
 {
 	DataGenerator data_generator;
-	std::vector<int_vec> data = data_generator.generate(100);
+	std::vector<int32_vec> data = data_generator.generate(100);
 
 	for (int i = 0; i < data.size(); i++)
 	{
@@ -23,7 +23,7 @@ int main()
 	std::cout << std::endl;
 	for (int i = 0; i < 100; i++)
 	{
-		int_vec next = data_accessor.get_next();
+		int32_vec next = data_accessor.get_next();
 		std::cout << next.first << "  " << next.second << std::endl;
 	}
 	system("pause");
