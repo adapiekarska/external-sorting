@@ -6,10 +6,13 @@ std::vector<int_vec> DataGenerator::generate(size_t n)
 {
 	std::vector<int_vec> data;
 
-	srand(time(NULL));
+	std::random_device rd;
+	std::mt19937 eng(rd());
+	std::uniform_int_distribution<> distr(0, MAX_VAL);
+
 	while (n--)
 	{
-		data.push_back(int_vec(rand(), rand()));
+		data.push_back(int_vec(distr(eng), distr(eng)));
 	}
 
 	return data;

@@ -1,8 +1,10 @@
 #pragma once
 
 #include <vector>
-#include <cstdlib>
-#include <ctime>
+#include <memory>
+#include <random>
+
+#define MAX_VAL 2147483647
 
 typedef std::pair<int, int> int_vec;
 
