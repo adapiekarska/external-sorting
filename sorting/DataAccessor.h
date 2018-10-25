@@ -10,6 +10,9 @@ public:
 	DataAccessor(std::string path);
 	~DataAccessor();
 
+	/**
+	Gets next record from the file.
+	*/
 	int_vec get_next();
 
 private:

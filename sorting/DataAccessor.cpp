@@ -16,7 +16,10 @@ int_vec DataAccessor::get_next()
 {
 	if (buffer.empty())
 		load();
-	return int_vec();
+	
+	int_vec next = buffer.at(0);
+	buffer.erase(buffer.begin());
+	return next;
 }
 
 void DataAccessor::load()
@@ -24,8 +27,8 @@ void DataAccessor::load()
 	int32_t first, second;
 	for (int i = 0; i < BUFFER_SIZE; i++)
 	{
-		ifs.read(reinterpret_cast<char *>(&first), sizeof(int32_t));
-		ifs.read(reinterpret_cast<char *>(&second), sizeof(int32_t));
+		ifs.read(reinterpret_cast<char*>(&first), sizeof(int32_t));
+		ifs.read(reinterpret_cast<char*>(&second), sizeof(int32_t));
 		buffer.push_back(int_vec(first, second));
 	}
 }

@@ -13,5 +13,5 @@ public:
 	void write(std::vector<int_vec> &v);
 
 private:
-	std::ofstream ofs;
+	std::string path;
 };

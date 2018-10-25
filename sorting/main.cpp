@@ -2,6 +2,8 @@
 
 #include "DataGenerator.h"
 #include "FileGenerator.h"
+#include "DataAccessor.h"
+
 
 int main()
 {
@@ -16,6 +18,14 @@ int main()
 	FileGenerator file_generator("out");
 	file_generator.write(data);
 
+	DataAccessor data_accessor("out");
+
+	std::cout << std::endl;
+	for (int i = 0; i < 100; i++)
+	{
+		int_vec next = data_accessor.get_next();
+		std::cout << next.first << "  " << next.second << std::endl;
+	}
 	system("pause");
 	return 0;
 }
