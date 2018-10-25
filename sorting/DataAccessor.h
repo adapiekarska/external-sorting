@@ -21,7 +21,7 @@ private:
 	std::vector<int32_vec> buffer;
 
 	/**
-	Loads records into the buffer.
+	Loads the block of records into the buffer.
 	*/
 	void load();
 };
