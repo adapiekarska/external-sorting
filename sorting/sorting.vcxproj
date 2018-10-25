@@ -118,6 +118,7 @@
   <ItemGroup>
     <ClInclude Include="DataGenerator.h" />
     <ClInclude Include="FileGenerator.h" />
+    <ClInclude Include="globals.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
