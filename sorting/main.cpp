@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "DataGenerator.h"
-
+#include "FileGenerator.h"
 
 int main()
 {
@@ -12,6 +12,9 @@ int main()
 	{
 		std::cout << data.at(i).first << ", " << data.at(i).second << std::endl;
 	}
+
+	FileGenerator file_generator("out");
+	file_generator.write(data);
 
 	system("pause");
 	return 0;
