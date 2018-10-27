@@ -11,15 +11,11 @@ public:
 
 	/**
 	Generates the vector of size n that contains randomly
-	generated pairs of integers.
+	generated pairs of integers representing vectors.
 	*/
-	std::vector<int32_vec> generate(size_t n) const;
+	std::vector<int32_vec> generate(size_t n, int from, int to) const;
 
 	DataGenerator();
 	~DataGenerator();
-
-private:
-	const int MIN_VAL = 0;
-	const int MAX_VAL = 10; //2147483647;
 };
 

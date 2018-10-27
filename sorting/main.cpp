@@ -8,7 +8,7 @@
 int main()
 {
 	DataGenerator data_generator;
-	std::vector<int32_vec> data = data_generator.generate(100);
+	std::vector<int32_vec> data = data_generator.generate(100, 0, 10);
 
 	for (int i = 0; i < data.size(); i++)
 	{
