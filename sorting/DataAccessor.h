@@ -6,7 +6,7 @@
 
 #include "globals.h"
 #include "exceptions/EOF_Exception.h"
-
+#include "Int32_Vec.h"
 
 class DataAccessor
 {
@@ -18,11 +18,11 @@ public:
 	Gets next record from the file. Throws an EOF exception
 	if there is no next record to be read.
 	*/
-	int32_vec get_next();
+	Int32_Vec get_next();
 
 private:
 	std::ifstream ifs;
-	std::vector<int32_vec> buffer;
+	std::vector<Int32_Vec> buffer;
 
 	/**
 	Loads the block of records into the buffer.

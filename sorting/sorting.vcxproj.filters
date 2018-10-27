@@ -32,6 +32,12 @@
     </ClCompile>
     <ClCompile Include="sort\Sort.cpp">
       <Filter>sort</Filter>
+	</ClCompile>
+    <ClCompile Include="Int32_Vec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="exceptions\EOF_Exception.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -49,6 +55,12 @@
     </ClInclude>
     <ClInclude Include="sort\Sort.h">
       <Filter>sort</Filter>
+    </ClInclude>
+    <ClInclude Include="Int32_Vec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="exceptions\EOF_Exception.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,12 +3,12 @@
 #include "DataGenerator.h"
 #include "FileGenerator.h"
 #include "DataAccessor.h"
-
+#include "Int32_Vec.h"
 
 int main()
 {
 	DataGenerator data_generator;
-	std::vector<int32_vec> data = data_generator.generate(64, 0, 10);
+	std::vector<Int32_Vec> data = data_generator.generate(64, 0, 10);
 
 	for (unsigned int i = 0; i < data.size(); i++)
 	{
@@ -26,7 +26,7 @@ int main()
 	{
 		try
 		{
-			int32_vec next = data_accessor.get_next();
+			Int32_Vec next = data_accessor.get_next();
 			std::cout << next.first << "  " << next.second << std::endl;
 		}
 		catch (const EOF_Exception&)
