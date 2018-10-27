@@ -1,6 +1,6 @@
 #include <fstream>
 
-#include "DataAccessor.h"
+#include "../DataAccessor.h"
 
 class Sort
 {
