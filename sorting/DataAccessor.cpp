@@ -25,11 +25,24 @@ int32_vec DataAccessor::get_next()
 
 void DataAccessor::load()
 {
-	int32_t first, second;
-	for (int i = 0; i < BUFFER_SIZE; i++)
+	char bytes[BUFFER_SIZE * sizeof(int32_t) * VEC_DIM];
+
+	int size = BUFFER_SIZE * sizeof(int32_t) * VEC_DIM;
+	ifs.read(bytes, size);
+
+	int no_records = size / sizeof(int32_t);
+	for (int i = 0; i < no_records; i+=2)
 	{
-		ifs.read(reinterpret_cast<char*>(&first), sizeof(int32_t));
-		ifs.read(reinterpret_cast<char*>(&second), sizeof(int32_t));
+		int32_t first = 0, second = 0;
+		// the bytes were written to file in reverse order
+		for (int j = 0; j < 4; j++)
+		{
+			first += bytes[i * 4 + j] << (8 * j);
+		}
+		for (int j = 0; j < 4; j++)
+		{
+			second += bytes[(i+1) * 4 + j] << (8 * j);
+		}
 		buffer.push_back(int32_vec(first, second));
 	}
 }

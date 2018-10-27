@@ -17,7 +17,6 @@ public:
 
 private:
 	std::ifstream ifs;
-	const int BUFFER_SIZE = 5;
 	std::vector<int32_vec> buffer;
 
 	/**
