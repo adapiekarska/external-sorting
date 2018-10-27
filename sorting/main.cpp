@@ -8,7 +8,7 @@
 int main()
 {
 	DataGenerator data_generator;
-	std::vector<int32_vec> data = data_generator.generate(100, 0, 10);
+	std::vector<int32_vec> data = data_generator.generate(1, 0, 10);
 
 	for (int i = 0; i < data.size(); i++)
 	{
@@ -21,11 +21,20 @@ int main()
 	DataAccessor data_accessor("out");
 
 	std::cout << std::endl;
-	for (int i = 0; i < 100; i++)
+
+	while (true)
 	{
-		int32_vec next = data_accessor.get_next();
-		std::cout << next.first << "  " << next.second << std::endl;
+		try
+		{
+			int32_vec next = data_accessor.get_next();
+			std::cout << next.first << "  " << next.second << std::endl;
+		}
+		catch (const EOF_Exception&)
+		{
+			break;
+		}
 	}
+
 	system("pause");
 	return 0;
 }

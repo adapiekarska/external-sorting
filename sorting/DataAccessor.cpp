@@ -15,7 +15,10 @@ DataAccessor::~DataAccessor()
 int32_vec DataAccessor::get_next()
 {
 	if (buffer.empty())
-		load();
+		if (ifs.eof())
+			throw EOF_Exception();
+		else
+			load();
 	
 	int32_vec next = buffer.at(0);
 	buffer.erase(buffer.begin());
@@ -23,15 +26,19 @@ int32_vec DataAccessor::get_next()
 	return next;
 }
 
-void DataAccessor::load()
+unsigned int DataAccessor::load()
 {
-	char bytes[BUFFER_SIZE * sizeof(int32_t) * VEC_DIM];
+	// number of bytes that have to be read from the file
+	size_t size = BUFFER_SIZE * sizeof(int32_t) * VEC_DIM;
 
-	int size = BUFFER_SIZE * sizeof(int32_t) * VEC_DIM;
-	ifs.read(bytes, size);
+	std::vector<char> bytes(size);
+	ifs.read(&bytes.at(0), size);
 
-	int no_records = size / sizeof(int32_t);
-	for (int i = 0; i < no_records; i+=2)
+	if (ifs.eof())
+		size = ifs.gcount();
+
+	unsigned int no_ints = size / sizeof(int32_t);
+	for (unsigned int i = 0; i < no_ints; i+=2)
 	{
 		int32_t first = 0, second = 0;
 		// the bytes were written to file in reverse order
@@ -45,4 +52,5 @@ void DataAccessor::load()
 		}
 		buffer.push_back(int32_vec(first, second));
 	}
+	return no_ints * 2;
 }
