@@ -115,12 +115,14 @@
     <ClCompile Include="DataGenerator.cpp" />
     <ClCompile Include="FileGenerator.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Sort.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataAccessor.h" />
     <ClInclude Include="DataGenerator.h" />
     <ClInclude Include="FileGenerator.h" />
     <ClInclude Include="globals.h" />
+    <ClInclude Include="Sort.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
