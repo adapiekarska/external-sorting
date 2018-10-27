@@ -113,6 +113,7 @@
   <ItemGroup>
     <ClCompile Include="DataAccessor.cpp" />
     <ClCompile Include="DataGenerator.cpp" />
+    <ClCompile Include="exceptions\EOF_Exception.cpp" />
     <ClCompile Include="FileGenerator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Sort.cpp" />
@@ -120,6 +121,7 @@
   <ItemGroup>
     <ClInclude Include="DataAccessor.h" />
     <ClInclude Include="DataGenerator.h" />
+    <ClInclude Include="exceptions\EOF_Exception.h" />
     <ClInclude Include="FileGenerator.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="Sort.h" />
