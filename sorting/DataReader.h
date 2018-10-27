@@ -1,18 +1,17 @@
 #pragma once
 
 #include <fstream>
-#include <stdexcept>
 #include <vector>
 
-#include "globals.h"
-#include "exceptions/EOF_Exception.h"
 #include "Int32_Vec.h"
+#include "exceptions\EOF_Exception.h"
+#include "globals.h"
 
-class DataAccessor
+class DataReader
 {
 public:
-	DataAccessor(std::string path);
-	~DataAccessor();
+	DataReader(std::string path);
+	~DataReader();
 
 	/**
 	Gets next record from the file. Throws an EOF exception
@@ -31,4 +30,6 @@ private:
 	less than BUFFER_SIZE records left to read until EOF.
 	*/
 	unsigned int load();
+
 };
+
