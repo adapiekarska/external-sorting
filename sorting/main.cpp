@@ -8,9 +8,9 @@
 int main()
 {
 	DataGenerator data_generator;
-	std::vector<int32_vec> data = data_generator.generate(1, 0, 10);
+	std::vector<int32_vec> data = data_generator.generate(64, 0, 10);
 
-	for (int i = 0; i < data.size(); i++)
+	for (unsigned int i = 0; i < data.size(); i++)
 	{
 		std::cout << data.at(i).first << ", " << data.at(i).second << std::endl;
 	}
