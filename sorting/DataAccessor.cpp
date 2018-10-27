@@ -12,13 +12,13 @@ DataAccessor::~DataAccessor()
 	ifs.close();
 }
 
-int32_vec DataAccessor::get_next()
+Int32_Vec DataAccessor::get_next()
 {
 	if (buffer.empty())
 		if (load() == 0)
 			throw EOF_Exception();
 	
-	int32_vec next = buffer.at(0);
+	Int32_Vec next = buffer.at(0);
 	buffer.erase(buffer.begin());
 
 	return next;
@@ -49,7 +49,7 @@ unsigned int DataAccessor::load()
 		{
 			second += bytes[(i+1) * 4 + j] << (8 * j);
 		}
-		buffer.push_back(int32_vec(first, second));
+		buffer.push_back(Int32_Vec(first, second));
 	}
 	return no_ints * 2;
 }
