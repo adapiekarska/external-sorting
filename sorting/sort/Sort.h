@@ -1,6 +1,8 @@
 #include <fstream>
 
-#include "../DataAccessor.h"
+#include "../DataReader.h"
+#include "../DataWriter.h"
+
 
 class Sort
 {
@@ -8,9 +10,15 @@ public:
 	Sort();
 	~Sort();
 
-private:
 	/**
 	Sorts the input file.
 	*/
-	void sort();
+	static void sort(std::string const &input_file_path);
+
+private:
+
+	/**
+	Distributes series of records from input file accross two tapes.
+	*/
+	static void distribute(std::string const &input_file_path);
 };

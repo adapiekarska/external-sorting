@@ -5,6 +5,7 @@
 #include "DataReader.h"
 #include "DataWriter.h"
 #include "Int32_Vec.h"
+#include "sort/Sort.h"
 
 int main()
 {
@@ -16,10 +17,10 @@ int main()
 		std::cout << data.at(i).first << ", " << data.at(i).second << std::endl;
 	}
 
-	FileGenerator file_generator("out");
+	FileGenerator file_generator("data");
 	file_generator.write(data);
 
-	DataReader data_reader("out");
+	/*DataReader data_reader("data");
 
 	std::cout << std::endl;
 
@@ -35,11 +36,9 @@ int main()
 			break;
 		}
 	}
+*/
 
-	DataWriter data_writer("data_writer_out");
-	data_writer.put_next(Int32_Vec(5, 5));
-	data_writer.put_next(Int32_Vec(1, 2));
-	data_writer.put_next(Int32_Vec(0, 7));
+	Sort::sort("data");
 
 	system("pause");
 	return 0;
