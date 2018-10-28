@@ -19,6 +19,6 @@ public:
 	int32_t second;
 
 private:
-	unsigned int length;
+	double length;
 };
 
