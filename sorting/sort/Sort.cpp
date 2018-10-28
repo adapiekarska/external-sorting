@@ -14,7 +14,7 @@ void Sort::merge(std::string const &output_file_path)
 	DataReader tape2_reader("tape2");
 	DataWriter output_writer(output_file_path);
 
-	Int32_Vec v_t1, v_t2, prev_v_t1, prev_v_t2;
+	Int32_Vec v_t1, v_t2;
 	
 	v_t1 = tape1_reader.get_next();
 	v_t2 = tape2_reader.get_next();
