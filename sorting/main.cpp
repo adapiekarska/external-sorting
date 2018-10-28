@@ -10,7 +10,7 @@
 int main()
 {
 	DataGenerator data_generator;
-	std::vector<Int32_Vec> data = data_generator.generate(64, 0, 10);
+	std::vector<Int32_Vec> data = data_generator.generate(20, 0, 10);
 
 	for (unsigned int i = 0; i < data.size(); i++)
 	{
@@ -19,24 +19,20 @@ int main()
 
 	FileGenerator file_generator("data");
 	file_generator.write(data);
-
-	/*DataReader data_reader("data");
-
-	std::cout << std::endl;
-
+/*
 	while (true)
 	{
 		try
 		{
 			Int32_Vec next = data_reader.get_next();
-			std::cout << next.first << "  " << next.second << std::endl;
+			data_writer.put_next(next);
 		}
 		catch (const EOF_Exception&)
 		{
 			break;
 		}
-	}
-*/
+	}*/
+
 
 	Sort::sort("data");
 

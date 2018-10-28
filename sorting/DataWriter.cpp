@@ -1,7 +1,7 @@
 #include "DataWriter.h"
+#include <iostream>	// TODO Remove
 
-
-DataWriter::DataWriter(std::string path) : ofs(path)
+DataWriter::DataWriter(std::string path) : ofs(path, std::ios::binary | std::istream::out)
 {
 }
 
@@ -40,7 +40,9 @@ void DataWriter::write_buffer()
 		{
 			bytes.push_back(v.second & mask);
 			v.second >>= 8;
+
 		}
 	}
-	ofs.write(&bytes[0], bytes.size());
+
+	ofs.write(bytes.data(), bytes.size());
 }

@@ -1,7 +1,7 @@
 #include "DataReader.h"
 
 
-DataReader::DataReader(std::string path) : ifs(path)
+DataReader::DataReader(std::string path) : ifs(path, std::ios::binary | std::istream::in)
 {
 }
 
