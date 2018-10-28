@@ -8,9 +8,9 @@
 #include "sort/Sort.h"
 
 int main()
-{
+{/*
 	DataGenerator data_generator;
-	std::vector<Int32_Vec> data = data_generator.generate(20, 0, 10);
+	std::vector<Int32_Vec> data = data_generator.generate(8, 0, 10);
 
 	for (unsigned int i = 0; i < data.size(); i++)
 	{
@@ -18,7 +18,7 @@ int main()
 	}
 
 	FileGenerator file_generator("data");
-	file_generator.write(data);
+	file_generator.write(data);*/
 /*
 	while (true)
 	{
@@ -33,8 +33,7 @@ int main()
 		}
 	}*/
 
-
-	Sort::sort("data");
+	Sort::sort("data2_kopia");
 
 	system("pause");
 	return 0;

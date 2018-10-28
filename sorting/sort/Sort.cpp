@@ -1,27 +1,81 @@
 #include "Sort.h"
 
 
-Sort::Sort()
-{
-}
-
-Sort::~Sort()
-{
-}
-
 void Sort::sort(std::string const &input_file_path)
 {
 	distribute(input_file_path);
+	merge(input_file_path);
 }
 
-void merge()
+void Sort::merge(std::string const &output_file_path)
 {
+	// create accessors for tapes
+	DataReader tape1_reader("tape1");
+	DataReader tape2_reader("tape2");
+	DataWriter output_writer(output_file_path);
 
+	Int32_Vec v_t1, v_t2, prev_v_t1, prev_v_t2;
+	
+	v_t1 = tape1_reader.get_next();
+	v_t2 = tape2_reader.get_next();
+
+	while (true)
+	{
+		if (v_t1 < v_t2)
+		{
+			try
+			{
+				output_writer.put_next(v_t1);
+				v_t1 = tape1_reader.get_next();
+			}
+			catch (const EOF_Exception&)
+			{
+				while (true)
+				{
+					try
+					{
+						v_t2 = tape2_reader.get_next();
+						output_writer.put_next(v_t2);
+					}
+					catch (const EOF_Exception&)
+					{
+						output_writer.put_next(v_t2);
+						return;
+					}
+				}
+			}
+		}
+		else
+		{
+			try
+			{
+				output_writer.put_next(v_t2);
+				v_t2 = tape2_reader.get_next();
+			}
+			catch (const EOF_Exception&)
+			{
+				output_writer.put_next(v_t2);
+				while (true)
+				{
+					try
+					{
+						v_t1 = tape1_reader.get_next();
+						output_writer.put_next(v_t1);
+					}
+					catch (const EOF_Exception&)
+					{
+						output_writer.put_next(v_t1);
+						return;
+					}
+				}
+			}
+		}
+	}
 }
 
 void Sort::distribute(std::string const &input_file_path)
 {
-	// create accessors for tapess
+	// create accessors for tapes
 	DataReader input_reader(input_file_path);
 	DataWriter tape1_writer("tape1");
 	DataWriter tape2_writer("tape2");
