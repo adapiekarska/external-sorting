@@ -21,10 +21,6 @@ void merge()
 
 void Sort::distribute(std::string const &input_file_path)
 {
-
-	std::ofstream tape1("tape1", std::ios::binary);
-	std::ofstream tape2("tape2", std::ios::binary);
-
 	// create accessors for tapess
 	DataReader input_reader(input_file_path);
 	DataWriter tape1_writer("tape1");
@@ -60,7 +56,4 @@ void Sort::distribute(std::string const &input_file_path)
 			break;
 		}
 	}
-
-	tape1.close();
-	tape2.close();
 }
