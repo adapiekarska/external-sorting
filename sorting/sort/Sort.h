@@ -23,8 +23,18 @@ private:
 	Sort() {};
 	~Sort() {};
 
+	/**
+	Copies records from the tape associated with reader to the tape associated with
+	writer until the end of file is reached. Note that r must be a reference to
+	the record that was last put in the data writer's buffer.
+	*/
 	static void copy_until_eof(DataReader & reader, DataWriter & writer, Int32_Vec &r);
 
+	/**
+	Copies records from the tape associated with reader to the tape associated with
+	writer until the end of series is reached. Note that r must be a reference to
+	the record that was last put in the data writer's buffer.
+	*/
 	static void copy_until_eos(DataReader & reader, DataWriter & writer, Int32_Vec &r);
 
 	/**

@@ -9,7 +9,7 @@ void Sort::sort(std::string const &input_file_path)
 
 void Sort::copy_until_eof(DataReader & reader, DataWriter & writer, Int32_Vec &r)
 {
-	writer.put_next(r);
+	//writer.put_next(r);
 	while (true)
 	{
 		r = reader.get_next();
@@ -22,7 +22,7 @@ void Sort::copy_until_eof(DataReader & reader, DataWriter & writer, Int32_Vec &r
 void Sort::copy_until_eos(DataReader & reader, DataWriter & writer, Int32_Vec & r)
 {
 	Int32_Vec prev_r = r;
-	writer.put_next(r);
+	//writer.put_next(r);
 
 	while ( true )
 	{
@@ -65,6 +65,7 @@ void Sort::merge(std::string const &output_file_path)
 			if (tape1_reader.eof)
 			{
 				// handle end of file on tape 1
+				output_writer.put_next(r_t2);
 				copy_until_eof(tape2_reader, output_writer, r_t2);
 				return;
 			}
@@ -72,6 +73,7 @@ void Sort::merge(std::string const &output_file_path)
 			if (r_t1 < prev_r_t1)
 			{
 				// handle end of series on tape 1
+				output_writer.put_next(r_t2);
 				copy_until_eos(tape2_reader, output_writer, r_t2);
 			}
 		}
@@ -84,6 +86,7 @@ void Sort::merge(std::string const &output_file_path)
 			if (tape2_reader.eof)
 			{
 				// handle end of file on tape 2
+				output_writer.put_next(r_t1);
 				copy_until_eof(tape1_reader, output_writer, r_t1);
 				return;
 			}
@@ -91,6 +94,7 @@ void Sort::merge(std::string const &output_file_path)
 			if (r_t2 < prev_r_t2)
 			{
 				// handle end of series on tape 2
+				output_writer.put_next(r_t1);
 				copy_until_eos(tape1_reader, output_writer, r_t1);
 			}
 
