@@ -12,16 +12,10 @@ void Sort::copy_until_eof(DataReader & reader, DataWriter & writer, Int32_Vec &r
 	writer.put_next(r);
 	while (true)
 	{
-		try
-		{
-			// prev_v_t2 = v_t2;
-			r = reader.get_next();
-			writer.put_next(r);
-		}
-		catch (const EOF_Exception&)
-		{
+		r = reader.get_next();
+		if (reader.eof)
 			return;
-		}
+		writer.put_next(r);
 	}
 }
 
@@ -32,18 +26,16 @@ void Sort::copy_until_eos(DataReader & reader, DataWriter & writer, Int32_Vec & 
 
 	while ( true )
 	{
-		try
-		{
-			prev_r = r;
-			r = reader.get_next();
-			if (r < prev_r)
-				break;
-			writer.put_next(r);
-		}
-		catch (const EOF_Exception&)
-		{
+		prev_r = r;
+		r = reader.get_next();
+
+		if (reader.eof)
 			return;
-		}
+
+		if (r < prev_r)
+			break;
+
+		writer.put_next(r);
 	}
 }
 
@@ -66,44 +58,42 @@ void Sort::merge(std::string const &output_file_path)
 	{
 		if (r_t1 < r_t2)
 		{
-			try
-			{
-				output_writer.put_next(r_t1);
-				prev_r_t1 = r_t1;
-				r_t1 = tape1_reader.get_next();
+			output_writer.put_next(r_t1);
+			prev_r_t1 = r_t1;
+			r_t1 = tape1_reader.get_next();
 
-				if (r_t1 < prev_r_t1)
-				{
-					// end of series on tape 1
-					copy_until_eos(tape2_reader, output_writer, r_t2);
-				}
-
-			}
-			catch (const EOF_Exception&)
+			if (tape1_reader.eof)
 			{
+				// handle end of file on tape 1
 				copy_until_eof(tape2_reader, output_writer, r_t2);
 				return;
+			}
+
+			if (r_t1 < prev_r_t1)
+			{
+				// handle end of series on tape 1
+				copy_until_eos(tape2_reader, output_writer, r_t2);
 			}
 		}
 		else
 		{
-			try
-			{
-				output_writer.put_next(r_t2);
-				prev_r_t2 = r_t2;
-				r_t2 = tape2_reader.get_next();
+			output_writer.put_next(r_t2);
+			prev_r_t2 = r_t2;
+			r_t2 = tape2_reader.get_next();
 
-				if (r_t2 < prev_r_t2)
-				{
-					// end of series on tape 2
-					copy_until_eos(tape1_reader, output_writer, r_t1);
-				}
-			}
-			catch (const EOF_Exception&)
+			if (tape2_reader.eof)
 			{
+				// handle end of file on tape 2
 				copy_until_eof(tape1_reader, output_writer, r_t1);
 				return;
 			}
+
+			if (r_t2 < prev_r_t2)
+			{
+				// handle end of series on tape 2
+				copy_until_eos(tape1_reader, output_writer, r_t1);
+			}
+
 		}
 	}
 }
@@ -125,24 +115,21 @@ void Sort::distribute(std::string const &input_file_path)
 
 	while (true)
 	{
-		try
-		{
-			v2 = input_reader.get_next();
-			if (v2 >= v1)
-				current_writer->put_next(v2);
-			else
-			{
-				if (current_writer == &tape1_writer)
-					current_writer = &tape2_writer;
-				else
-					current_writer = &tape1_writer;
-				current_writer->put_next(v2);
-			}
-			v1 = v2;
-		}
-		catch (const EOF_Exception&)
-		{
+		v2 = input_reader.get_next();
+
+		if (input_reader.eof)
 			break;
+
+		if (v2 >= v1)
+			current_writer->put_next(v2);
+		else
+		{
+			if (current_writer == &tape1_writer)
+				current_writer = &tape2_writer;
+			else
+				current_writer = &tape1_writer;
+			current_writer->put_next(v2);
 		}
+		v1 = v2;
 	}
 }

@@ -3,6 +3,7 @@
 
 DataReader::DataReader(std::string path) : ifs(path, std::ios::binary | std::istream::in)
 {
+	eof = false;
 }
 
 DataReader::~DataReader()
@@ -14,7 +15,10 @@ Int32_Vec DataReader::get_next()
 {
 	if (buffer.empty())
 		if (load() == 0)
-			throw EOF_Exception();
+		{
+			eof = true;
+			return Int32_Vec();
+		}
 
 	Int32_Vec next = buffer.front();
 	buffer.erase(buffer.begin());
