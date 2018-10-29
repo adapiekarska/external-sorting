@@ -3,6 +3,7 @@
 
 DataReader::DataReader(std::string path) : ifs(path, std::ios::binary | std::istream::in)
 {
+	disk_read_counter = 0;
 	eof = false;
 }
 
@@ -53,6 +54,8 @@ unsigned int DataReader::load()
 		}
 		buffer.push_back(Int32_Vec(first, second));
 	}
+
+	disk_read_counter++;
 	return no_ints * 2;
 }
 

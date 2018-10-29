@@ -10,6 +10,8 @@ class DataReader
 {
 public:
 
+	unsigned int disk_read_counter;
+
 	/**
 	Flag indicating whether the end of file has been reached. Note that
 	this is set only after the file reader has gone past the end of file,
