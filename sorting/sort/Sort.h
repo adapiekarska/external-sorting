@@ -13,6 +13,8 @@ public:
 	*/
 	static void sort(std::string const &input_file_path);
 
+	
+
 private:
 
 	/**
@@ -20,6 +22,10 @@ private:
 	*/
 	Sort() {};
 	~Sort() {};
+
+	static void copy_until_eof(DataReader & reader, DataWriter & writer, Int32_Vec &r);
+
+	static void copy_until_eos(DataReader & reader, DataWriter & writer, Int32_Vec &r);
 
 	/**
 	Distributes series of records from input file accross two tapes.

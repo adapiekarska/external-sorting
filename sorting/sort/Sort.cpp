@@ -7,6 +7,46 @@ void Sort::sort(std::string const &input_file_path)
 	merge(input_file_path);
 }
 
+void Sort::copy_until_eof(DataReader & reader, DataWriter & writer, Int32_Vec &r)
+{
+	writer.put_next(r);
+	while (true)
+	{
+		try
+		{
+			// prev_v_t2 = v_t2;
+			r = reader.get_next();
+			writer.put_next(r);
+		}
+		catch (const EOF_Exception&)
+		{
+			return;
+		}
+	}
+}
+
+void Sort::copy_until_eos(DataReader & reader, DataWriter & writer, Int32_Vec & r)
+{
+	Int32_Vec prev_r = r;
+	writer.put_next(r);
+
+	while ( true )
+	{
+		try
+		{
+			prev_r = r;
+			r = reader.get_next();
+			if (r < prev_r)
+				break;
+			writer.put_next(r);
+		}
+		catch (const EOF_Exception&)
+		{
+			return;
+		}
+	}
+}
+
 void Sort::merge(std::string const &output_file_path)
 {
 	// create accessors for tapes
@@ -14,60 +54,55 @@ void Sort::merge(std::string const &output_file_path)
 	DataReader tape2_reader("tape2");
 	DataWriter output_writer(output_file_path);
 
-	Int32_Vec v_t1, v_t2;
+	Int32_Vec r_t1, r_t2, prev_r_t1, prev_r_t2;
 	
-	v_t1 = tape1_reader.get_next();
-	v_t2 = tape2_reader.get_next();
+	r_t1 = tape1_reader.get_next();
+	r_t2 = tape2_reader.get_next();
+
+	prev_r_t1 = r_t1;
+	prev_r_t2 = r_t2;
 
 	while (true)
 	{
-		if (v_t1 < v_t2)
+		if (r_t1 < r_t2)
 		{
 			try
 			{
-				output_writer.put_next(v_t1);
-				v_t1 = tape1_reader.get_next();
+				output_writer.put_next(r_t1);
+				prev_r_t1 = r_t1;
+				r_t1 = tape1_reader.get_next();
+
+				if (r_t1 < prev_r_t1)
+				{
+					// end of series on tape 1
+					copy_until_eos(tape2_reader, output_writer, r_t2);
+				}
+
 			}
 			catch (const EOF_Exception&)
 			{
-				while (true)
-				{
-					try
-					{
-						v_t2 = tape2_reader.get_next();
-						output_writer.put_next(v_t2);
-					}
-					catch (const EOF_Exception&)
-					{
-						output_writer.put_next(v_t2);
-						return;
-					}
-				}
+				copy_until_eof(tape2_reader, output_writer, r_t2);
+				return;
 			}
 		}
 		else
 		{
 			try
 			{
-				output_writer.put_next(v_t2);
-				v_t2 = tape2_reader.get_next();
+				output_writer.put_next(r_t2);
+				prev_r_t2 = r_t2;
+				r_t2 = tape2_reader.get_next();
+
+				if (r_t2 < prev_r_t2)
+				{
+					// end of series on tape 2
+					copy_until_eos(tape1_reader, output_writer, r_t1);
+				}
 			}
 			catch (const EOF_Exception&)
 			{
-				output_writer.put_next(v_t2);
-				while (true)
-				{
-					try
-					{
-						v_t1 = tape1_reader.get_next();
-						output_writer.put_next(v_t1);
-					}
-					catch (const EOF_Exception&)
-					{
-						output_writer.put_next(v_t1);
-						return;
-					}
-				}
+				copy_until_eof(tape1_reader, output_writer, r_t1);
+				return;
 			}
 		}
 	}

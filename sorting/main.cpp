@@ -33,7 +33,7 @@ int main()
 		}
 	}*/
 
-	Sort::sort("data2_kopia");
+	Sort::sort("data3");
 
 	system("pause");
 	return 0;
