@@ -9,6 +9,9 @@
 class DataWriter
 {
 public:
+
+	unsigned int series;
+
 	DataWriter(std::string path);
 	~DataWriter();
 
@@ -24,5 +27,8 @@ private:
 	std::ofstream ofs;
 	std::vector<Int32_Vec> buffer;
 
+	unsigned int disk_write_counter;
+
+	Int32_Vec last_put;
 };
 

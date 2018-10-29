@@ -4,6 +4,7 @@
 #include "../DataWriter.h"
 #include "../FileDisplayer.h"
 
+
 class Sort
 {
 public:
@@ -13,7 +14,6 @@ public:
 	*/
 	static void sort(std::string const &input_file_path);
 
-	
 
 private:
 
@@ -43,7 +43,8 @@ private:
 	static void distribute(std::string const &input_file_path);
 
 	/**
-	Merges records from the two tapes into output file.
+	Merges records from the two tapes into output file. Returns the number of series
+	written to the output file.
 	*/
-	static void merge(std::string const &output_file_path);
+	static unsigned int merge(std::string const &output_file_path);
 };
