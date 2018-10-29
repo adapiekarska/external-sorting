@@ -33,3 +33,9 @@ bool operator<=(const Int32_Vec & v1, const Int32_Vec & v2)
 	// return v1.length <= v2.length;
 	return v1.first <= v2.first;
 }
+
+std::ostream & operator<<(std::ostream & output, const Int32_Vec & vec)
+{
+	output << vec.first << " " << vec.second;
+	return output;
+}

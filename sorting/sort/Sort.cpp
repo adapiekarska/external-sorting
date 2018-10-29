@@ -3,13 +3,17 @@
 
 void Sort::sort(std::string const &input_file_path)
 {
+	FileDisplayer displayer;
+
+	displayer.display(input_file_path);
 	distribute(input_file_path);
 	merge(input_file_path);
+	displayer.display("tape1");
+	displayer.display("tape2");
 }
 
 void Sort::copy_until_eof(DataReader & reader, DataWriter & writer, Int32_Vec &r)
 {
-	//writer.put_next(r);
 	while (true)
 	{
 		r = reader.get_next();
@@ -22,7 +26,6 @@ void Sort::copy_until_eof(DataReader & reader, DataWriter & writer, Int32_Vec &r
 void Sort::copy_until_eos(DataReader & reader, DataWriter & writer, Int32_Vec & r)
 {
 	Int32_Vec prev_r = r;
-	//writer.put_next(r);
 
 	while ( true )
 	{

@@ -1,4 +1,6 @@
 #pragma once
+
+#include <ostream>
 #include <cstdint>
 #include <cmath>
 
@@ -14,6 +16,8 @@ public:
 	friend bool operator>= (const Int32_Vec &v1, const Int32_Vec& v2);
 	friend bool operator< (const Int32_Vec& v1, const Int32_Vec& v2);
 	friend bool operator<= (const Int32_Vec& v1, const Int32_Vec& v2);
+
+	friend std::ostream &operator<<(std::ostream &output, const Int32_Vec &vec);
 
 	int32_t first;
 	int32_t second;
