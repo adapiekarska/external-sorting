@@ -1,20 +1,15 @@
 #include "FileDisplayer.h"
 
-
-FileDisplayer::FileDisplayer()
-{
-}
-
-FileDisplayer::~FileDisplayer()
-{
-}
-
 void FileDisplayer::display(std::string const & file_path)
 {
 	DataReader reader(file_path);
 	Int32_Vec r;
 
-	while (!reader.eof)
+	while (true)
+	{
 		std::cout << reader.get_next() << "   ";
+		if (reader.eof)
+			break;
+	}
 	std::cout << std::endl;
 }

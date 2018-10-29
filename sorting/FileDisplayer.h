@@ -7,8 +7,8 @@
 class FileDisplayer
 {
 public:
-	FileDisplayer();
-	~FileDisplayer();
+	FileDisplayer() {};
+	~FileDisplayer() {};
 
 	void display(std::string const & file_path);
 };

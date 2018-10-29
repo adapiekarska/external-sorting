@@ -10,6 +10,11 @@ class DataReader
 {
 public:
 
+	/**
+	Flag indicating whether the end of file has been reached. Note that
+	this is set only after the file reader has gone past the end of file,
+	not when the last byte is reached.
+	*/
 	bool eof;
 
 	/**

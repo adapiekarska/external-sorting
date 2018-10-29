@@ -14,7 +14,7 @@ DataReader::~DataReader()
 Int32_Vec DataReader::get_next()
 {
 	if (buffer.empty())
-		if (load() == 0)
+		if (load() < BUFFER_SIZE * sizeof(int32_t) * VEC_DIM)
 		{
 			eof = true;
 			return Int32_Vec();
