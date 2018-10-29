@@ -114,7 +114,6 @@
     <ClCompile Include="DataGenerator.cpp" />
     <ClCompile Include="DataReader.cpp" />
     <ClCompile Include="DataWriter.cpp" />
-    <ClCompile Include="exceptions\EOF_Exception.cpp" />
     <ClCompile Include="FileGenerator.cpp" />
     <ClCompile Include="Int32_Vec.cpp" />
     <ClCompile Include="main.cpp" />
@@ -124,7 +123,6 @@
     <ClInclude Include="DataGenerator.h" />
     <ClInclude Include="DataReader.h" />
     <ClInclude Include="DataWriter.h" />
-    <ClInclude Include="exceptions\EOF_Exception.h" />
     <ClInclude Include="FileGenerator.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="sort\Sort.h" />

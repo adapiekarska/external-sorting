@@ -4,18 +4,22 @@
 #include <vector>
 
 #include "Int32_Vec.h"
-#include "exceptions\EOF_Exception.h"
 #include "globals.h"
 
 class DataReader
 {
 public:
+
+	bool eof;
+
+	/**
+	Constructors and destructors.
+	*/
 	DataReader(std::string path);
 	~DataReader();
 
 	/**
-	Gets next record from the file. Throws an EOF exception
-	if there is no next record to be read.
+	Gets next record from the file.
 	*/
 	Int32_Vec get_next();
 

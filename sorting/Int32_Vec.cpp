@@ -12,20 +12,24 @@ Int32_Vec::~Int32_Vec() { }
 
 bool operator>(const Int32_Vec & v1, const Int32_Vec & v2)
 {
-	return v1.length > v2.length;
+	//return v1.length > v2.length;
+	return v1.first > v2.first;
 }
 
 bool operator>=(const Int32_Vec & v1, const Int32_Vec & v2)
 {
-	return v1.length >= v2.length;
+	// return v1.length >= v2.length;
+	return v1.first >= v2.first;
 }
 
 bool operator<(const Int32_Vec & v1, const Int32_Vec & v2)
 {
-	return v1.length < v2.length;
+	//return v1.length < v2.length;
+	return v1.first < v2.first;
 }
 
 bool operator<=(const Int32_Vec & v1, const Int32_Vec & v2)
 {
-	return v1.length <= v2.length;
+	// return v1.length <= v2.length;
+	return v1.first <= v2.first;
 }
