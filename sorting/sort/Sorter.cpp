@@ -95,9 +95,7 @@ unsigned int Sorter::merge(std::string const &output_file_path)
 				// handle end of file on tape 1
 				output_writer.put_next(r_t2);
 				copy_until_eof(tape2_reader, output_writer, r_t2);
-
-				update_disk_ops(accessors);
-				return output_writer.series;
+				break;
 			}
 
 			if (r_t1 < prev_r_t1)
@@ -118,8 +116,7 @@ unsigned int Sorter::merge(std::string const &output_file_path)
 				// handle end of file on tape 2
 				output_writer.put_next(r_t1);
 				copy_until_eof(tape1_reader, output_writer, r_t1);
-				update_disk_ops(accessors);
-				return output_writer.series;
+				break;
 			}
 
 			if (r_t2 < prev_r_t2)
