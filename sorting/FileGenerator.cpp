@@ -10,7 +10,6 @@ void FileGenerator::write(std::vector<Int32_Vec> &v)
 		ofs.write(reinterpret_cast<char*>(&v.at(i).first), sizeof(int32_t));
 		ofs.write(reinterpret_cast<char*>(&v.at(i).second), sizeof(int32_t));
 	}
-
 	ofs.close();
 }
 

@@ -69,10 +69,7 @@ unsigned int Sorter::merge(std::string const &output_file_path)
 	DataReader tape2_reader("tape2");
 	DataWriter output_writer(output_file_path);
 
-	std::vector<DataAccessor*> accessors;
-	accessors.push_back(&tape1_reader);
-	accessors.push_back(&tape2_reader);
-	accessors.push_back(&output_writer);
+	std::vector<DataAccessor*> accessors = { &tape1_reader, &tape2_reader, &output_writer};
 
 	Int32_Vec r_t1, r_t2, prev_r_t1, prev_r_t2;
 	
@@ -145,10 +142,7 @@ void Sorter::distribute(std::string const &input_file_path)
 	DataWriter tape1_writer("tape1");
 	DataWriter tape2_writer("tape2");
 
-	std::vector<DataAccessor*> accessors;
-	accessors.push_back(&input_reader);
-	accessors.push_back(&tape1_writer);
-	accessors.push_back(&tape2_writer);
+	std::vector<DataAccessor*> accessors = {&input_reader, &tape1_writer, &tape2_writer};
 
 	Int32_Vec v1, v2;
 

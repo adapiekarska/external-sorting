@@ -50,6 +50,5 @@ void DataWriter::write_buffer()
 	}
 
 	ofs.write(bytes.data(), bytes.size());
-
 	disk_ops++;
 }
