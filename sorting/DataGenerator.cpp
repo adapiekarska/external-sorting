@@ -1,7 +1,7 @@
 #include "DataGenerator.h"
 
 
-std::vector<Int32_Vec> DataGenerator::generate(size_t n, int from, int to) const
+std::vector<Int32_Vec> DataGenerator::random_generate(size_t n, int from, int to) const
 {
 	std::vector<Int32_Vec> data;
 
@@ -17,11 +17,22 @@ std::vector<Int32_Vec> DataGenerator::generate(size_t n, int from, int to) const
 	return data;
 }
 
-DataGenerator::DataGenerator()
+std::vector<Int32_Vec> DataGenerator::user_generate() const
 {
-}
+	std::vector<Int32_Vec> data;
 
+	std::cout << "Please provide space-separated pairs of integers." << std::endl;
 
-DataGenerator::~DataGenerator()
-{
+	std::string line;
+
+	int32_t first, second;
+	do
+	{
+		std::getline(std::cin, line);
+		std::istringstream iss(line);
+		if (iss >> first >> second)
+			data.push_back(Int32_Vec(first, second));
+	} while (line != "");
+
+	return data;
 }

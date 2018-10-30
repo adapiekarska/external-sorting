@@ -33,6 +33,9 @@ int main()
 		}
 	}*/
 
+	DataGenerator dg;
+	std::vector<Int32_Vec> data = dg.user_generate();
+
 	Sort::sort("data3");
 
 	system("pause");
