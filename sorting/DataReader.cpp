@@ -15,7 +15,7 @@ DataReader::~DataReader()
 Int32_Vec DataReader::get_next()
 {
 	if (buffer.empty())
-		if (load() < BUFFER_SIZE * sizeof(int32_t) * VEC_DIM)
+		if (load() == 0 )
 		{
 			eof = true;
 			return Int32_Vec();
@@ -56,6 +56,6 @@ unsigned int DataReader::load()
 	}
 
 	disk_read_counter++;
-	return no_ints * 2;
+	return size;
 }
 

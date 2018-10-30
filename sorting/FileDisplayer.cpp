@@ -7,8 +7,10 @@ void FileDisplayer::display(std::string const & file_path)
 
 	while (true)
 	{
-		std::cout << reader.get_next() << "   ";
-		if (reader.eof)
+		r = reader.get_next();
+		if (!reader.eof)
+			std::cout << r << "   ";
+		else
 			break;
 	}
 	std::cout << std::endl;
