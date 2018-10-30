@@ -3,17 +3,17 @@
 #include <fstream>
 #include <vector>
 
+#include "DataAccessor.h"
 #include "Int32_Vec.h"
 #include "globals.h"
 
-class DataWriter
+class DataWriter : public DataAccessor
 {
 public:
 
 	unsigned int series;
-	unsigned int disk_write_counter;
 
-	DataWriter(std::string path);
+	DataWriter(std::string const & file_path);
 	~DataWriter();
 
 	/**
@@ -24,8 +24,6 @@ public:
 private:
 
 	std::ofstream ofs;
-	std::vector<Int32_Vec> buffer;
-
 	Int32_Vec last_put;
 
 	void write_buffer();

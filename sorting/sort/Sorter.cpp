@@ -1,35 +1,38 @@
-#include "Sort.h"
+#include "Sorter.h"
 
 
-void Sort::sort(std::string const &input_file_path)
+Sorter::Sorter(std::string const & main_file_path) : disk_ops(0), main_file_path(main_file_path)
 {
+}
 
+void Sorter::sort()
+{
 	std::string tape1_file_path = "tape1";
 	std::string tape2_file_path = "tape2";
 
 	FileDisplayer displayer;
 
 	std::cout << "Before sort: " << std::endl;
-	displayer.display(input_file_path);
+	displayer.display(main_file_path);
 
 	unsigned int series, phases = 0;
 	do
 	{
-		distribute(input_file_path);
-		series = merge(input_file_path);
+		distribute(main_file_path);
+		series = merge(main_file_path);
 		displayer.display(tape1_file_path);
 		displayer.display(tape2_file_path);
 		phases++;
 	} while (series > 1);
 
 	std::cout << "After sort: " << std::endl;
-	displayer.display(input_file_path);
-
+	displayer.display(main_file_path);
 
 	std::cout << "Phases: " << phases << std::endl;
+	std::cout << "Disk operations: " << disk_ops << std::endl;
 }
 
-void Sort::copy_until_eof(DataReader & reader, DataWriter & writer, Int32_Vec &r)
+void Sorter::copy_until_eof(DataReader & reader, DataWriter & writer, Int32_Vec &r)
 {
 	while (true)
 	{
@@ -40,7 +43,7 @@ void Sort::copy_until_eof(DataReader & reader, DataWriter & writer, Int32_Vec &r
 	}
 }
 
-void Sort::copy_until_eos(DataReader & reader, DataWriter & writer, Int32_Vec & r)
+void Sorter::copy_until_eos(DataReader & reader, DataWriter & writer, Int32_Vec & r)
 {
 	Int32_Vec prev_r = r;
 
@@ -59,12 +62,17 @@ void Sort::copy_until_eos(DataReader & reader, DataWriter & writer, Int32_Vec & 
 	}
 }
 
-unsigned int Sort::merge(std::string const &output_file_path)
+unsigned int Sorter::merge(std::string const &output_file_path)
 {
 	// create accessors for tapes
 	DataReader tape1_reader("tape1");
 	DataReader tape2_reader("tape2");
 	DataWriter output_writer(output_file_path);
+
+	std::vector<DataAccessor*> accessors;
+	accessors.push_back(&tape1_reader);
+	accessors.push_back(&tape2_reader);
+	accessors.push_back(&output_writer);
 
 	Int32_Vec r_t1, r_t2, prev_r_t1, prev_r_t2;
 	
@@ -87,6 +95,8 @@ unsigned int Sort::merge(std::string const &output_file_path)
 				// handle end of file on tape 1
 				output_writer.put_next(r_t2);
 				copy_until_eof(tape2_reader, output_writer, r_t2);
+
+				update_disk_ops(accessors);
 				return output_writer.series;
 			}
 
@@ -108,6 +118,7 @@ unsigned int Sort::merge(std::string const &output_file_path)
 				// handle end of file on tape 2
 				output_writer.put_next(r_t1);
 				copy_until_eof(tape1_reader, output_writer, r_t1);
+				update_disk_ops(accessors);
 				return output_writer.series;
 			}
 
@@ -120,15 +131,27 @@ unsigned int Sort::merge(std::string const &output_file_path)
 		}
 	}
 
+	update_disk_ops(accessors);
 	return output_writer.series;
 }
 
-void Sort::distribute(std::string const &input_file_path)
+void Sorter::update_disk_ops(std::vector<DataAccessor*> const & accessors)
+{
+	for (DataAccessor* da : accessors)
+		disk_ops += da->disk_ops;
+}
+
+void Sorter::distribute(std::string const &input_file_path)
 {
 	// create accessors for tapes
 	DataReader input_reader(input_file_path);
 	DataWriter tape1_writer("tape1");
 	DataWriter tape2_writer("tape2");
+
+	std::vector<DataAccessor*> accessors;
+	accessors.push_back(&input_reader);
+	accessors.push_back(&tape1_writer);
+	accessors.push_back(&tape2_writer);
 
 	Int32_Vec v1, v2;
 
@@ -157,4 +180,6 @@ void Sort::distribute(std::string const &input_file_path)
 		}
 		v1 = v2;
 	}
+
+	update_disk_ops(accessors);
 }

@@ -1,10 +1,8 @@
 #include "DataReader.h"
 
 
-DataReader::DataReader(std::string path) : ifs(path, std::ios::binary | std::istream::in)
+DataReader::DataReader(std::string const & file_path) : DataAccessor(file_path), ifs(file_path, std::ios::binary | std::istream::in), eof(false)
 {
-	disk_read_counter = 0;
-	eof = false;
 }
 
 DataReader::~DataReader()
@@ -55,7 +53,7 @@ unsigned int DataReader::load()
 		buffer.push_back(Int32_Vec(first, second));
 	}
 
-	disk_read_counter++;
+	disk_ops++;
 	return size;
 }
 

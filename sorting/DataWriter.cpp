@@ -1,9 +1,8 @@
 #include "DataWriter.h"
 
-DataWriter::DataWriter(std::string path) : ofs(path, std::ios::binary | std::istream::out)
+DataWriter::DataWriter(std::string const & file_path) : DataAccessor(file_path), ofs(file_path, std::ios::binary | std::istream::out)
 {
 	series = 1;
-	disk_write_counter = 0;
 }
 
 
@@ -16,7 +15,7 @@ DataWriter::~DataWriter()
 
 void DataWriter::put_next(Int32_Vec r)
 {
-	if (disk_write_counter != 0 || !buffer.empty())
+	if (disk_ops != 0 || !buffer.empty())
 		if (r < last_put)
 			series++;
 
@@ -52,5 +51,5 @@ void DataWriter::write_buffer()
 
 	ofs.write(bytes.data(), bytes.size());
 
-	disk_write_counter++;
+	disk_ops++;
 }

@@ -5,6 +5,7 @@
 #include <cmath>
 
 
+// TODO make this class support arbitrary number of dimensions
 class Int32_Vec
 {
 public:

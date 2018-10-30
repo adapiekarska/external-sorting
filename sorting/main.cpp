@@ -5,7 +5,7 @@
 #include "DataReader.h"
 #include "DataWriter.h"
 #include "Int32_Vec.h"
-#include "sort/Sort.h"
+#include "sort/Sorter.h"
 
 int main()
 {/*
@@ -36,7 +36,8 @@ int main()
 	//DataGenerator dg;
 	//std::vector<Int32_Vec> data = dg.user_generate();
 
-	Sort::sort("data3");
+	Sorter sorter("data3");
+	sorter.sort();
 
 	system("pause");
 	return 0;

@@ -3,14 +3,13 @@
 #include <fstream>
 #include <vector>
 
+#include "DataAccessor.h"
 #include "Int32_Vec.h"
 #include "globals.h"
 
-class DataReader
+class DataReader : public DataAccessor
 {
 public:
-
-	unsigned int disk_read_counter;
 
 	/**
 	Flag indicating whether the end of file has been reached. Note that
@@ -22,7 +21,7 @@ public:
 	/**
 	Constructors and destructors.
 	*/
-	DataReader(std::string path);
+	DataReader(std::string const & file_path);
 	~DataReader();
 
 	/**
@@ -32,7 +31,6 @@ public:
 
 private:
 	std::ifstream ifs;
-	std::vector<Int32_Vec> buffer;
 
 	/**
 	Loads the block of records into the buffer.
