@@ -44,11 +44,11 @@ unsigned int DataReader::load()
 		// the bytes were written to file in reversed order
 		for (int j = 0; j < 4; j++)
 		{
-			first += bytes[i * 4 + j] << (8 * j);
+			first += (unsigned char)(bytes[i * 4 + j] << (8 * j));
 		}
 		for (int j = 0; j < 4; j++)
 		{
-			second += bytes[(i + 1) * 4 + j] << (8 * j);
+			second += (unsigned char)(bytes[(i + 1) * 4 + j] << (8 * j));
 		}
 		buffer.push_back(Int32_Vec(first, second));
 	}
