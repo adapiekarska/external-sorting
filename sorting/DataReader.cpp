@@ -1,7 +1,8 @@
 #include "DataReader.h"
 
 
-DataReader::DataReader(std::string const & file_path) : DataAccessor(file_path), ifs(file_path, std::ios::binary | std::istream::in), eof(false)
+DataReader::DataReader(std::string const & file_path) 
+	: DataAccessor(file_path), ifs(file_path, std::ios::binary | std::istream::in), eof(false)
 {
 }
 
@@ -44,11 +45,15 @@ unsigned int DataReader::load()
 		// the bytes were written to file in reversed order
 		for (int j = 0; j < 4; j++)
 		{
-			first += (unsigned char)(bytes[i * 4 + j] << (8 * j));
+			unsigned int x = (unsigned char)(bytes[i * 4 + j]);
+			unsigned int y = x << (8 * j);
+			first +=  y;
 		}
 		for (int j = 0; j < 4; j++)
 		{
-			second += (unsigned char)(bytes[(i + 1) * 4 + j] << (8 * j));
+			unsigned int x = (unsigned char)(bytes[(i + 1) * 4 + j]);
+			unsigned int y = x << (8 * j);
+			second += y;
 		}
 		buffer.push_back(Int32_Vec(first, second));
 	}
