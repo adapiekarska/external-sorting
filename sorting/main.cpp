@@ -9,7 +9,7 @@
 
 enum input_mode
 {
-	NONE,
+	NONE,			// initial state
 	IN_RANDOM,		// randomly generated file
 	IN_FILE,		// input file from disk
 	IN_USER			// user generated records
@@ -196,40 +196,6 @@ int main(int argc, char** argv)
 	Sorter sorter(input_file_name);
 	//Sorter sorter("data5");
 	//sorter.sort(config.step_by_step, config.verbosity);
-
-	/*
-	DataGenerator data_generator;
-	std::vector<Int32_Vec> data = data_generator.generate(8, 0, 10);
-
-	for (unsigned int i = 0; i < data.size(); i++)
-	{
-		std::cout << data.at(i).first << ", " << data.at(i).second << std::endl;
-	}
-
-	FileGenerator file_generator("data");
-	file_generator.write(data);*/
-/*
-	while (true)
-	{
-		try
-		{
-			Int32_Vec next = data_reader.get_next();
-			data_writer.put_next(next);
-		}
-		catch (const EOF_Exception&)
-		{
-			break;
-		}
-	}*/
-
-	//DataGenerator dg;
-	//std::vector<Int32_Vec> data = dg.user_generate();
-
-	//DataWriter dwriter("data4");
-	//std::vector<int32_t> v = { 44, 55, 12, 42, 94, 18, 6, 67, 45, 148, 356, 7, 1 };
-
-	//for (int32_t i : v)
-	//	dwriter.put_next(Int32_Vec(i, i));
 
 	system("pause");
 	return 0;
