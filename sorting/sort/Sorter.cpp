@@ -101,8 +101,23 @@ unsigned int Sorter::merge(std::string const &output_file_path)
 
 	Int32_Vec r_t1, r_t2, prev_r_t1, prev_r_t2;
 	
+
+	// Check whether any of the tapes were empty and copy the other tape
+	// entirely into the output file if before were true.
 	r_t1 = tape1_reader.get_next();
+	if (tape1_reader.eof)
+	{
+		copy_until_eof(tape2_reader, output_writer, r_t2);
+		return output_writer.series;
+	}
+
 	r_t2 = tape2_reader.get_next();
+	if (tape2_reader.eof)
+	{
+		output_writer.put_next(r_t1);
+		copy_until_eof(tape1_reader, output_writer, r_t1);
+		return output_writer.series;
+	}
 
 	prev_r_t1 = r_t1;
 	prev_r_t2 = r_t2;
