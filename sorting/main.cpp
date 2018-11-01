@@ -129,7 +129,7 @@ CONFIG parse_args(int argc, char** argv)
 				"	-u, --user\n"
 				"		Guides user through the process of typing the records with the keyboard.\n"
 				"\n"
-				"	If no one of the above flags is specified, the input is generated randomly\n"
+				"	If none of the above flags is specified, the input is generated randomly\n"
 				"	just as if -r flag was provided.\n"
 				"\n"
 				"	-s, --step-by-step\n"
