@@ -129,8 +129,8 @@
     <ClInclude Include="FileDisplayer.h" />
     <ClInclude Include="FileGenerator.h" />
     <ClInclude Include="globals.h" />
-    <ClInclude Include="sort\Sorter.h" />
     <ClInclude Include="Int32_Vec.h" />
+    <ClInclude Include="sort\Sorter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

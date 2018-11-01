@@ -36,10 +36,10 @@
     <ClCompile Include="FileDisplayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sort\Sorter.cpp">
+    <ClCompile Include="DataAccessor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DataAccessor.cpp">
+    <ClCompile Include="sort\Sorter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,10 +65,10 @@
     <ClInclude Include="FileDisplayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sort\Sorter.h">
+    <ClInclude Include="DataAccessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DataAccessor.h">
+    <ClInclude Include="sort\Sorter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
