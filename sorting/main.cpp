@@ -10,8 +10,8 @@
 enum input_mode
 {
 	NONE = -1,
-	IN_FILE = 0,
-	IN_USER = 1
+	IN_FILE = 0,		// randomly generated file
+	IN_USER = 1			// user generated records
 };
 
 typedef struct CONFIG
@@ -145,7 +145,7 @@ int main(int argc, char** argv)
 	//for (int32_t i : v)
 	//	dwriter.put_next(Int32_Vec(i, i));
 
-	Sorter sorter("data4");
+	Sorter sorter("data5");
 	sorter.sort();
 
 	system("pause");

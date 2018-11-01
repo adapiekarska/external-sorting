@@ -14,7 +14,7 @@ public:
 
 
 	/**
-	Sorts the input file.
+	Sorts the input file associated with the Sorter object.
 	*/
 	void sort();
 
