@@ -175,7 +175,7 @@ int main(int argc, char** argv)
 		case input_mode::IN_RANDOM:
 		{
 			data = data_generator.random_generate(8, 0, 10);
-			input_file_name = "data";
+			input_file_name = "input/data";
 			FileGenerator file_generator(input_file_name);
 			file_generator.write(data);
 		}
@@ -186,7 +186,7 @@ int main(int argc, char** argv)
 		case input_mode::IN_USER:
 		{
 			data = data_generator.user_generate();
-			input_file_name = "data";
+			input_file_name = "input/data";
 			FileGenerator file_generator(input_file_name);
 			file_generator.write(data);
 		}
@@ -195,7 +195,7 @@ int main(int argc, char** argv)
 
 	Sorter sorter(input_file_name);
 	//Sorter sorter("data5");
-	//sorter.sort(config.step_by_step, config.verbosity);
+	sorter.sort(config.step_by_step, config.verbosity);
 
 	system("pause");
 	return 0;

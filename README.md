@@ -6,6 +6,10 @@ The program implements the **external sorting methods** in order to sort a set o
 ## Goal
 The project's goal is to demonstrate the external sorting alghorithms. The program is **not** written as a general utility that enables you to sort set of any kind of records, because of the imposed format of the record. Although the door to generalize the problem was left open and it is highly possible that the project will be refactored in the future so that it will allow sorting of a file containing any kind of records.
 
+## Setup notes
+1. Clone or download the repository.
+2. To build the solution, either you'll need to open the project directly in Visual Studio IDE or use the `devenv` command line tool shipped with Microsoft Windows SDK. In order to use this tool to build the project, open the Visual Studio Developer Command Prompt and type `devenv /build Debug PATH_TO_SLN_FILE`.
+
 ## Input data
 
 ### File format
@@ -15,6 +19,9 @@ If you are using `-f` option and supplying your hand-generated file, please make
 
 ### Records
 The assumption is made that the single record is the 2D vector. Therefore each record in the binary file should be a pair of 4-byte long integers. This implies that the **byte length of the file should be divisible by 8**, since each record should be exactly 8-byte long.
+
+### Sample input data
+Sample input files can be found in [input subdirectory](sorting/input) of the project.
 
 ## Sorting
 
