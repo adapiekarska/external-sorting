@@ -14,7 +14,7 @@ DataReader::~DataReader()
 Int32_Vec DataReader::get_next()
 {
 	if (buffer.empty())
-		if (load() == 0 )
+		if (load_buffer() == 0 )
 		{
 			eof = true;
 			return Int32_Vec();
@@ -26,7 +26,7 @@ Int32_Vec DataReader::get_next()
 	return next;
 }
 
-unsigned int DataReader::load()
+unsigned int DataReader::load_buffer()
 {
 	// number of bytes that have to be read from the file
 	std::streamsize size = BUFFER_SIZE * sizeof(int32_t) * VEC_DIM;
@@ -61,4 +61,3 @@ unsigned int DataReader::load()
 	disk_ops++;
 	return size;
 }
-

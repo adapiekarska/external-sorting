@@ -13,6 +13,9 @@ public:
 	Int32_Vec(int32_t first, int32_t second);
 	~Int32_Vec();
 
+	/**
+	Comparison operators.
+	*/
 	friend bool operator> (const Int32_Vec& v1, const Int32_Vec& v2);
 	friend bool operator>= (const Int32_Vec &v1, const Int32_Vec& v2);
 	friend bool operator< (const Int32_Vec& v1, const Int32_Vec& v2);
@@ -26,4 +29,3 @@ public:
 private:
 	double length;
 };
-

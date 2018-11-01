@@ -10,6 +10,10 @@ public:
 	FileDisplayer() {};
 	~FileDisplayer() {};
 
+	/**
+	Displays contents of the file. Uses DataReader object and
+	utilizes its ability of block read.
+	*/
 	void display(std::string const & file_path);
 };
 

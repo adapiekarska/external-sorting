@@ -10,8 +10,8 @@
 enum input_mode
 {
 	NONE = -1,
-	IN_FILE = 0,
-	IN_USER = 1
+	IN_FILE = 0,		// randomly generated file
+	IN_USER = 1			// user generated records
 };
 
 typedef struct CONFIG

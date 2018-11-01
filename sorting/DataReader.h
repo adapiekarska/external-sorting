@@ -38,7 +38,7 @@ private:
 	equal to BUFFER_SIZE except the situation when there is
 	less than BUFFER_SIZE records left to read until EOF.
 	*/
-	unsigned int load();
+	unsigned int load_buffer();
 
 };
 
