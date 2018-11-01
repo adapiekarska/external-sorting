@@ -16,7 +16,7 @@ public:
 	/**
 	Sorts the input file associated with the Sorter object.
 	*/
-	void sort();
+	void sort(bool step_by_step, bool verbose);
 
 
 private:

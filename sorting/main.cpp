@@ -18,8 +18,8 @@ typedef struct CONFIG
 {
 	bool valid;
 	bool step_by_step;
+	bool verbosity;
 	input_mode input_mode;
-	std::string input_file_path;
 } CONFIG;
 
 CONFIG parse_args(int argc, char** argv)
@@ -27,8 +27,8 @@ CONFIG parse_args(int argc, char** argv)
 	CONFIG config;
 	config.valid = true;
 	config.step_by_step = false;
+	config.verbosity = false;
 	config.input_mode = NONE;
-	config.input_file_path = "";
 
 	if (argc == 0)
 		config.valid = false;
@@ -47,34 +47,20 @@ CONFIG parse_args(int argc, char** argv)
 		{
 			config.step_by_step = true;
 		}
+		else if (opt == "-v" || opt == "--verbose")
+		{
+			config.verbosity = true;
+		}
 		else if ((opt == "-f" || opt == "--file"))
 		{
-			if (i != opts.size() - 1)
+			if (config.input_mode == IN_USER)
 			{
-				if (config.input_mode == IN_USER)
-				{
-					std::cout << "Invalid option " << opt << " if -u specified before." << std::endl;
-					config.valid = false;
-				}
-				else
-				{
-					// omit the file path in argument parsing
-					config.input_mode = input_mode::IN_FILE;
-					if (opts[i + 1][0] != '-')
-					{
-						config.input_file_path = opts[i + 1];
-						i++;
-					}
-					else
-					{
-						std::cout << "Missing filename after " << opt << std::endl;
-						config.valid = false;
-					}
-				}
+				std::cout << "Invalid option " << opt << " if -u specified before." << std::endl;
+				config.valid = false;
 			}
 			else
 			{
-				config.valid = false;
+				config.input_mode = input_mode::IN_FILE;
 			}
 		}
 		else if (opt == "-u" || opt == "--user")
@@ -109,7 +95,23 @@ int main(int argc, char** argv)
 	std::cout << "valid: " << config.valid << std::endl;
 	std::cout << "input_mode" << config.input_mode << std::endl;
 	std::cout << "step by step" << config.step_by_step << std::endl;
-	std::cout << "input file path" << config.input_file_path << std::endl;
+	std::cout << "verbosity" << config.verbosity << std::endl;
+
+	if (!config.valid)
+		return -1;
+
+	DataGenerator data_generator;
+	std::vector<Int32_Vec> data;
+	if (config.input_mode == IN_USER)
+		data = data_generator.user_generate();
+	else if (config.input_mode == IN_FILE)
+		data = data_generator.random_generate(8, 0, 10);
+
+	FileGenerator file_generator("data");
+	file_generator.write(data);
+
+	Sorter sorter("data5");
+	sorter.sort(config.step_by_step, config.verbosity);
 
 	/*
 	DataGenerator data_generator;
@@ -144,9 +146,6 @@ int main(int argc, char** argv)
 
 	//for (int32_t i : v)
 	//	dwriter.put_next(Int32_Vec(i, i));
-
-	Sorter sorter("data5");
-	sorter.sort();
 
 	system("pause");
 	return 0;

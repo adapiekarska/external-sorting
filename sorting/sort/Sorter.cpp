@@ -5,30 +5,58 @@ Sorter::Sorter(std::string const & main_file_path) : disk_ops(0), main_file_path
 {
 }
 
-void Sorter::sort()
+void Sorter::sort(bool step_by_step, bool verbose)
 {
 	std::string tape1_file_path = "tape1";
 	std::string tape2_file_path = "tape2";
 
 	FileDisplayer displayer;
 
-	std::cout << "Before sort: " << std::endl;
-	displayer.display(main_file_path);
+	if (verbose || step_by_step)
+	{
+		std::cout << "Before sort: " << std::endl;
+		displayer.display(main_file_path);
+		std::cout << std::endl;
+	}
 
-	unsigned int series, phases = 0;
+	unsigned int series, phase = 0;
 	do
 	{
+		if (verbose || step_by_step)
+		{
+			std::cout << "PHASE " << phase << std::endl;
+		}
 		distribute(main_file_path);
+		if (verbose || step_by_step)
+		{
+			std::cout << "Tape 1: ";
+			displayer.display(tape1_file_path);
+			std::cout << "Tape 2: ";
+			displayer.display(tape2_file_path);
+			std::cout << std::endl;
+		}
 		series = merge(main_file_path);
-		displayer.display(tape1_file_path);
-		displayer.display(tape2_file_path);
-		phases++;
+		if (verbose || step_by_step)
+		{
+			std::cout << "Main file: ";
+			displayer.display(main_file_path);
+			std::cout << std::endl;
+		}
+		if (step_by_step)
+			system("pause");
+		if (verbose || step_by_step)
+			std::cout << std::endl;
+		phase++;
 	} while (series > 1);
 
-	std::cout << "After sort: " << std::endl;
-	displayer.display(main_file_path);
+	if (verbose || step_by_step)
+	{
+		std::cout << "SORTED." << std::endl;
+		std::cout << "After sort: " << std::endl;
+		displayer.display(main_file_path);
+	}
 
-	std::cout << "Phases: " << phases << std::endl;
+	std::cout << "Phases: " << phase << std::endl;
 	std::cout << "Disk operations: " << disk_ops << std::endl;
 }
 
