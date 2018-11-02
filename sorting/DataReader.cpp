@@ -17,6 +17,7 @@ Int32_Vec DataReader::get_next()
 		if (load_buffer() == 0 )
 		{
 			eof = true;
+			// returns garbage
 			return Int32_Vec();
 		}
 
