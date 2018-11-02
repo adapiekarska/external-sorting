@@ -27,27 +27,31 @@ private:
 	/**
 	Copies records from the tape associated with reader to the tape associated with
 	writer until the end of file is reached. Note that r must be a reference to
-	the record that was last put in the data writer's buffer.
+	the record that was last put in the data writer's buffer. The value referenced
+	by r at the moment of calling the function will NOT be copied to the writer's
+	tape.
 	*/
 	void copy_until_eof(DataReader & reader, DataWriter & writer, Int32_Vec &r);
 
 	/**
 	Copies records from the tape associated with reader to the tape associated with
 	writer until the end of series is reached. Note that r must be a reference to
-	the record that was last put in the data writer's buffer.
+	the record that was last put in the data writer's buffer. The value referenced
+	by r at the moment of calling the function will NOT be copied to the writer's
+	tape.
 	*/
-	void copy_until_eos(DataReader & reader, DataWriter & writer, Int32_Vec &r);
+	void copy_until_eos(DataReader & reader, DataWriter & writer, Int32_Vec & r);
 
 	/**
 	Distributes series of records from input file accross two tapes.
 	*/
-	void distribute(std::string const &input_file_path);
+	void distribute(std::string const & input_file_path, std::string const & tape1_path, std::string const & tape2_path);
 
 	/**
 	Merges records from the two tapes into output file. Returns the number of series
 	written to the output file.
 	*/
-	unsigned int merge(std::string const &output_file_path);
+	unsigned int merge(std::string const & tape1_path, std::string const & tape2_path, std::string const &output_file_path);
 
 	/**
 	Updates disk operations counter with respect to the readers and writers.

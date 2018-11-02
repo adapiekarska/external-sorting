@@ -7,8 +7,8 @@ Sorter::Sorter(std::string const & main_file_path) : disk_ops(0), main_file_path
 
 void Sorter::sort(bool step_by_step, bool verbose)
 {
-	std::string tape1_file_path = "tape1";
-	std::string tape2_file_path = "tape2";
+	std::string tape1_path = "tape1";
+	std::string tape2_path = "tape2";
 
 	FileDisplayer displayer;
 
@@ -26,16 +26,16 @@ void Sorter::sort(bool step_by_step, bool verbose)
 		{
 			std::cout << "PHASE " << phase << std::endl;
 		}
-		distribute(main_file_path);
+		distribute(main_file_path, tape1_path, tape2_path);
 		if (verbose || step_by_step)
 		{
 			std::cout << "Tape 1: ";
-			displayer.display(tape1_file_path);
+			displayer.display(tape1_path);
 			std::cout << "Tape 2: ";
-			displayer.display(tape2_file_path);
+			displayer.display(tape2_path);
 			std::cout << std::endl;
 		}
-		series = merge(main_file_path);
+		series = merge(tape1_path, tape2_path, main_file_path);
 		if (verbose || step_by_step)
 		{
 			std::cout << "Main file: ";
@@ -90,11 +90,11 @@ void Sorter::copy_until_eos(DataReader & reader, DataWriter & writer, Int32_Vec 
 	}
 }
 
-unsigned int Sorter::merge(std::string const &output_file_path)
+unsigned int Sorter::merge(std::string const & tape1_path, std::string const & tape2_path, std::string const & output_file_path)
 {
 	// create accessors for tapes
-	DataReader tape1_reader("tape1");
-	DataReader tape2_reader("tape2");
+	DataReader tape1_reader(tape1_path);
+	DataReader tape2_reader(tape2_path);
 	DataWriter output_writer(output_file_path);
 
 	std::vector<DataAccessor*> accessors = { &tape1_reader, &tape2_reader, &output_writer};
@@ -178,12 +178,12 @@ void Sorter::update_disk_ops(std::vector<DataAccessor*> const & accessors)
 		disk_ops += da->disk_ops;
 }
 
-void Sorter::distribute(std::string const &input_file_path)
+void Sorter::distribute(std::string const &input_file_path, std::string const & tape1_path, std::string const & tape2_path)
 {
 	// create accessors for tapes
 	DataReader input_reader(input_file_path);
-	DataWriter tape1_writer("tape1");
-	DataWriter tape2_writer("tape2");
+	DataWriter tape1_writer(tape1_path);
+	DataWriter tape2_writer(tape2_path);
 
 	std::vector<DataAccessor*> accessors = {&input_reader, &tape1_writer, &tape2_writer};
 
