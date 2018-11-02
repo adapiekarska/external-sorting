@@ -43,15 +43,15 @@ private:
 	void copy_until_eos(DataReader & reader, DataWriter & writer, Int32_Vec & r);
 
 	/**
-	Distributes series of records from input file accross two tapes.
+	Distributes series of records from input file accross the tapes.
 	*/
-	void distribute(std::string const & input_file_path, std::string const & tape1_path, std::string const & tape2_path);
+	void distribute(std::string const & input_file_path, unsigned int out_tapes);
 
 	/**
 	Merges records from the two tapes into output file. Returns the number of series
 	written to the output file.
 	*/
-	unsigned int merge(std::string const & tape1_path, std::string const & tape2_path, std::string const &output_file_path);
+	unsigned int merge(std::string const &output_file_path, unsigned int in_tapes);
 
 	/**
 	Updates disk operations counter with respect to the readers and writers.

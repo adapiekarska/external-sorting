@@ -193,7 +193,7 @@ int main(int argc, char** argv)
 		break;
 	}
 
-	Sorter sorter(input_file_name);
+	Sorter sorter("input/data4");
 	//Sorter sorter("data5");
 	sorter.sort(config.step_by_step, config.verbosity);
 

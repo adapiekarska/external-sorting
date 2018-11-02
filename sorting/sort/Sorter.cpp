@@ -26,7 +26,8 @@ void Sorter::sort(bool step_by_step, bool verbose)
 		{
 			std::cout << "PHASE " << phase << std::endl;
 		}
-		distribute(main_file_path, tape1_path, tape2_path);
+		std::vector<std::string> tape_paths = { tape1_path, tape2_path };
+		distribute(main_file_path, tape_paths);
 		if (verbose || step_by_step)
 		{
 			std::cout << "Tape 1: ";
@@ -178,42 +179,55 @@ void Sorter::update_disk_ops(std::vector<DataAccessor*> const & accessors)
 		disk_ops += da->disk_ops;
 }
 
-void Sorter::distribute(std::string const &input_file_path, std::string const & tape1_path, std::string const & tape2_path)
+void Sorter::distribute(std::string const &input_file_path, unsigned int out_tapes)
 {
 	// create accessors for tapes
 	DataReader input_reader(input_file_path);
-	DataWriter tape1_writer(tape1_path);
-	DataWriter tape2_writer(tape2_path);
+	std::vector<DataWriter*> tape_writers;
+	std::vector<DataAccessor*> accessors = { &input_reader };
 
-	std::vector<DataAccessor*> accessors = {&input_reader, &tape1_writer, &tape2_writer};
+	for (unsigned int i = 0; i < out_tapes; i++)
+		tape_writers.push_back(new DataWriter("tape"+i));
 
-	Int32_Vec v1, v2;
 
-	DataWriter* current_writer = &tape1_writer;
+	Int32_Vec r1, r2;
+
+	unsigned int current_writer_idx = 0;
+	DataWriter* current_writer = tape_writers.at(current_writer_idx);
 
 	// put the first record onto the first tape
-	v1 = input_reader.get_next();
-	current_writer->put_next(v1);
+	r1 = input_reader.get_next();
+	current_writer->put_next(r1);
 
 	while (true)
 	{
-		v2 = input_reader.get_next();
+		r2 = input_reader.get_next();
 
 		if (input_reader.eof)
 			break;
 
-		if (v2 >= v1)
-			current_writer->put_next(v2);
+		if (r2 >= r1)
+			current_writer->put_next(r2);
 		else
 		{
+			current_writer_idx++;
+			current_writer_idx %= tape_writers.size();
+			current_writer = tape_writers.at(current_writer_idx);
+			/*
 			if (current_writer == &tape1_writer)
 				current_writer = &tape2_writer;
 			else
-				current_writer = &tape1_writer;
-			current_writer->put_next(v2);
+				current_writer = &tape1_writer;*/
+			current_writer->put_next(r2);
 		}
-		v1 = v2;
+		r1 = r2;
 	}
 
 	update_disk_ops(accessors);
+	// TODO UPDATE DISK OPS!!!!!!!
+	//update_disk_ops(tape_writers);
+
+	for (std::vector< DataWriter* >::iterator it = tape_writers.begin(); it != tape_writers.end(); ++it)
+		delete (*it);
+	tape_writers.clear();
 }
