@@ -15,6 +15,9 @@ DataWriter::~DataWriter()
 
 void DataWriter::put_next(Int32_Vec r)
 {
+	if (buffer.empty())
+		disk_ops++;
+
 	if (disk_ops != 0 || !buffer.empty())
 		if (r < last_put)
 			series++;
@@ -50,5 +53,5 @@ void DataWriter::write_buffer()
 	}
 
 	ofs.write(bytes.data(), bytes.size());
-	disk_ops++;
+	//disk_ops++;
 }
