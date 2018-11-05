@@ -195,7 +195,7 @@ int main(int argc, char** argv)
 
 	Sorter sorter("input/data3");
 	//Sorter sorter("data5");
-	sorter.sort(config.step_by_step, config.verbosity);
+	sorter.sort(config.step_by_step, config.verbosity, 3);
 
 	system("pause");
 	return 0;

@@ -18,6 +18,10 @@ public:
 	*/
 	bool eof;
 
+	bool eos;
+
+	bool stop;
+
 	/**
 	Constructors and destructors.
 	*/
@@ -32,13 +36,15 @@ public:
 private:
 	std::ifstream ifs;
 
+	Int32_Vec last_read;
+
 	/**
 	Loads the block of records into the buffer.
 	Returns number of the records loaded, which should be
 	equal to BUFFER_SIZE except the situation when there is
 	less than BUFFER_SIZE records left to read until EOF.
 	*/
-	unsigned int load_buffer();
+	size_t load_buffer();
 
 };
 

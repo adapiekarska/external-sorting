@@ -5,10 +5,9 @@ Sorter::Sorter(std::string const & main_file_path) : disk_ops(0), main_file_path
 {
 }
 
-void Sorter::sort(bool step_by_step, bool verbose)
+void Sorter::sort(bool step_by_step, bool verbose, size_t tapes)
 {
-	std::string tape1_path = "tape0";
-	std::string tape2_path = "tape1";
+	this->tapes = tapes;
 
 	FileDisplayer displayer;
 
@@ -26,16 +25,16 @@ void Sorter::sort(bool step_by_step, bool verbose)
 		{
 			std::cout << "PHASE " << phase << std::endl;
 		}
-		distribute(main_file_path, 2);
+		distribute(main_file_path);
 		if (verbose || step_by_step)
 		{
-			std::cout << "Tape 1: ";
-			displayer.display(tape1_path);
-			std::cout << "Tape 2: ";
-			displayer.display(tape2_path);
-			std::cout << std::endl;
+			for (size_t i = 0; i < tapes; i++)
+			{
+				std::cout << "Tape " << i << ": ";
+				displayer.display("tape" + std::to_string(i));
+			}
 		}
-		series = merge(main_file_path, 2);
+		series = merge(main_file_path);
 		if (verbose || step_by_step)
 		{
 			std::cout << "Main file: ";
@@ -71,56 +70,25 @@ void Sorter::copy_until_eof(DataReader & reader, DataWriter & writer, Int32_Vec 
 	}
 }
 
-void Sorter::copy_until_eos(DataReader & reader, DataWriter & writer, Int32_Vec & r)
+size_t Sorter::merge(std::string const & output_file_path)
 {
-	Int32_Vec prev_r = r;
-
-	while ( true )
-	{
-		prev_r = r;
-		r = reader.get_next();
-
-		if (reader.eof)
-			return;
-
-		if (r < prev_r)
-			break;
-
-		writer.put_next(r);
-	}
-}
-
-void Sorter::copy(std::vector<DataReader*>& readers, DataWriter & writer)
-{
-}
-
-unsigned int Sorter::merge(std::string const & output_file_path, unsigned int in_tapes)
-{
-	// create accessors for tapes
-	//DataReader tape1_reader(tape1_path);
-	//DataReader tape2_reader(tape2_path);
-	
 	std::vector<DataReader*> tape_readers;
-	for (unsigned int i = 0; i < in_tapes; i++)
+	for (size_t i = 0; i < tapes; i++)
 		tape_readers.push_back(new DataReader("tape" + std::to_string(i)));
 
 	DataWriter output_writer(output_file_path);
 
-	// std::vector<DataAccessor*> accessors = { &tape1_reader, &tape2_reader, &output_writer};
-
+	// vector of front records from all of the tapes
 	std::vector<Int32_Vec> fronts;
-	std::vector<Int32_Vec> prev_fronts;
-	
-	Int32_Vec record;
 
-	// Get first records from all tapes and check whether any of the tapes
-	// is empty
+	// populate fronts vector
 	for (std::vector<DataReader*>::iterator it = tape_readers.begin(); it != tape_readers.end();)
 	{
 		DataReader* reader = *it;
-		record = reader->get_next();
+		Int32_Vec record = reader->get_next();
 		if (reader->eof)
 		{
+			// remove the empty tape
 			it = tape_readers.erase(it);
 		}
 		else
@@ -130,160 +98,146 @@ unsigned int Sorter::merge(std::string const & output_file_path, unsigned int in
 		}
 	}
 
-	for (size_t i = 0; i < fronts.size(); i++)
-		prev_fronts.push_back(fronts.at(i));
-	
-	unsigned int idx;
+	std::vector<bool> stopped;
+	size_t stopped_count = 0;
+
+	for (DataReader* reader : tape_readers)
+		stopped.push_back(false);
+
+	// merging loop
+
+	//unsigned int idx;
 	DataReader* current_reader;
 	while (true)
 	{
-		idx = min(fronts);
+		// find the smallest record amongst all tapes' fronting records
+		// ignoring the tapes that reached eos
+		size_t idx = min(fronts, stopped);
+
+		// put the smallest found record onto the output writer
 		output_writer.put_next(fronts.at(idx));
 
+		// update the current reader
 		current_reader = tape_readers.at(idx);
-		record = current_reader->get_next();
+
+		Int32_Vec record = current_reader->get_next();
+
 		if (current_reader->eof)
 		{
+			// current reader has reached end of file
 			tape_readers.erase(tape_readers.begin() + idx);
 			fronts.erase(fronts.begin() + idx);
-			prev_fronts.erase(prev_fronts.begin() + idx);
+			stopped.erase(stopped.begin() + idx);
+
+			// exit the loop if all of the readers are exhausted
+			if (tape_readers.empty())
+				break;
 		}
 		else
 		{
-			if (fronts.at(idx) < prev_fronts.at(idx))
-			{
-				// end of series on tape with index idx
-
-			}
-			prev_fronts.at(idx) = fronts.at(idx);
+			// update proper front element
 			fronts.at(idx) = record;
+			if (current_reader->eos)
+			{
+				// end of series on the current reader
+				stopped.at(idx) = true;
+				stopped_count++;
+			}
 		}
-		// exit the loop if all of the readers are exhausted
-		if (tape_readers.empty())
-			break;
+
+		if (stopped_count == tape_readers.size())
+		{
+			for (size_t i = 0; i < stopped.size(); i++)
+				stopped.at(i) = false;
+			stopped_count = 0;
+		}
 	}
 
-	//while (true)
-	//{
-	//	if (r_t1 < r_t2)
-	//	{
-	//		output_writer.put_next(r_t1);
-	//		prev_r_t1 = r_t1;
-	//		r_t1 = tape1_reader.get_next();
+	// update disk operations counter
+	for (DataReader * reader : tape_readers)
+		disk_ops += reader->disk_ops;
+	disk_ops += output_writer.disk_ops;
 
-	//		if (tape1_reader.eof)
-	//		{
-	//			// handle end of file on tape 1
-	//			output_writer.put_next(r_t2);
-	//			copy_until_eof(tape2_reader, output_writer, r_t2);
-	//			break;
-	//		}
-
-	//		if (r_t1 < prev_r_t1)
-	//		{
-	//			// handle end of series on tape 1
-	//			output_writer.put_next(r_t2);
-	//			copy_until_eos(tape2_reader, output_writer, r_t2);
-	//		}
-	//	}
-	//	else
-	//	{
-	//		output_writer.put_next(r_t2);
-	//		prev_r_t2 = r_t2;
-	//		r_t2 = tape2_reader.get_next();
-
-	//		if (tape2_reader.eof)
-	//		{
-	//			// handle end of file on tape 2
-	//			output_writer.put_next(r_t1);
-	//			copy_until_eof(tape1_reader, output_writer, r_t1);
-	//			break;
-	//		}
-
-	//		if (r_t2 < prev_r_t2)
-	//		{
-	//			// handle end of series on tape 2
-	//			output_writer.put_next(r_t1);
-	//			copy_until_eos(tape1_reader, output_writer, r_t1);
-	//		}
-	//	}
-	//}
-
-	// TODO update disk ops
-	//update_disk_ops(accessors);
-
+	// delete tape readers pointers
 	for (std::vector< DataReader* >::iterator it = tape_readers.begin(); it != tape_readers.end(); ++it)
 		delete (*it);
 	tape_readers.clear();
 
+	// return number of series written by the output writer
 	return output_writer.series;
 }
 
-void Sorter::distribute(std::string const &input_file_path, unsigned int out_tapes)
+void Sorter::distribute(std::string const &input_file_path)
 {
-	// create accessors for tapes
 	DataReader input_reader(input_file_path);
 	std::vector<DataWriter*> tape_writers;
-	//std::vector<DataAccessor*> accessors = { &input_reader };
-
-	for (unsigned int i = 0; i < out_tapes; i++)
+	for (size_t i = 0; i < tapes; i++)
 		tape_writers.push_back(new DataWriter("tape"+std::to_string(i)));
 
+	Int32_Vec prev_r, r;
 
-	Int32_Vec r1, r2;
-
-	unsigned int current_writer_idx = 0;
+	size_t current_writer_idx = 0;
+	
 	DataWriter* current_writer = tape_writers.at(current_writer_idx);
 
-	// put the first record onto the first tape
-	r1 = input_reader.get_next();
-	current_writer->put_next(r1);
+	// put the first record from the reader onto the first tape
+	prev_r = input_reader.get_next();
+	current_writer->put_next(prev_r);
 
 	while (true)
 	{
-		r2 = input_reader.get_next();
+		r = input_reader.get_next();
 
 		if (input_reader.eof)
 			break;
 
-		if (r2 >= r1)
-			current_writer->put_next(r2);
+		if (r >= prev_r)
+			current_writer->put_next(r);
 		else
 		{
+			// change the tape
 			current_writer_idx++;
 			current_writer_idx %= tape_writers.size();
 			current_writer = tape_writers.at(current_writer_idx);
-			/*
-			if (current_writer == &tape1_writer)
-				current_writer = &tape2_writer;
-			else
-				current_writer = &tape1_writer;*/
-			current_writer->put_next(r2);
+			current_writer->put_next(r);
 		}
-		r1 = r2;
+		prev_r = r;
 	}
 
-	//update_disk_ops(accessors);
-	// TODO UPDATE DISK OPS!!!!!!!
-	//update_disk_ops(tape_writers);
+	// update disk operations counter
+	for (DataWriter * writer : tape_writers)
+		disk_ops += writer->disk_ops;
+	disk_ops += input_reader.disk_ops;
 
+	// delete tape writers pointers
 	for (std::vector< DataWriter* >::iterator it = tape_writers.begin(); it != tape_writers.end(); ++it)
 		delete (*it);
 	tape_writers.clear();
 }
 
-void Sorter::update_disk_ops(std::vector<DataAccessor*> const & accessors)
+size_t Sorter::min(std::vector<Int32_Vec> const & fronts, std::vector<bool> & stopped) const
 {
-	for (DataAccessor* da : accessors)
-		disk_ops += da->disk_ops;
-}
-
-unsigned int Sorter::min(std::vector<Int32_Vec> const & vec) const
-{
-	unsigned int min = 0;
-	for (size_t i=1; i<vec.size(); i++)
-		if (vec.at(i) < vec.at(min))
-			min = i;
+	size_t min;
+	bool min_initialized = false;
+	for (size_t i = 0; i < fronts.size(); i++)
+	{
+		if (!stopped.at(i)) 
+		{
+			if (!min_initialized)
+			{
+				min = i;
+				min_initialized = true;
+			}
+			else if (fronts.at(i) < fronts.at(min))
+				min = i;
+		}
+	}
 
 	return min;
+}
+
+void Sorter::update_disk_ops(std::vector<DataAccessor*> accessors)
+{
+	for (DataAccessor* accessor : accessors)
+		disk_ops += accessor->disk_ops;
 }

@@ -28,6 +28,10 @@ public:
 private:
 
 	std::ofstream ofs;
+
+	/**
+	The record that was last put.
+	*/
 	Int32_Vec last_put;
 
 	/**

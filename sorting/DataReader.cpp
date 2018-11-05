@@ -2,14 +2,9 @@
 
 
 DataReader::DataReader(std::string const & file_path) 
-	: DataAccessor(file_path), ifs(file_path, std::ios::binary | std::istream::in), eof(false)
-{
-}
+	: DataAccessor(file_path), ifs(file_path, std::ios::binary | std::istream::in), eof(false), eos(false) { }
 
-DataReader::~DataReader()
-{
-	ifs.close();
-}
+DataReader::~DataReader() { ifs.close(); }
 
 Int32_Vec DataReader::get_next()
 {
@@ -24,21 +19,25 @@ Int32_Vec DataReader::get_next()
 	Int32_Vec next = buffer.front();
 	buffer.erase(buffer.begin());
 
+	if (disk_ops != 0 && next < last_read)
+		eos = true;
+
+	last_read = next;
 	return next;
 }
 
-unsigned int DataReader::load_buffer()
+size_t DataReader::load_buffer()
 {
 	// number of bytes that have to be read from the file
-	std::streamsize size = BUFFER_SIZE * sizeof(int32_t) * VEC_DIM;
+	size_t size = BUFFER_SIZE * sizeof(int32_t) * VEC_DIM;
 
 	std::vector<char> bytes(size);
 	ifs.read(&bytes.at(0), size);
 
 	if (ifs.eof())
-		size = ifs.gcount();
+		size = static_cast<size_t>(ifs.gcount());
 
-	unsigned int no_ints = size / sizeof(int32_t);
+	size_t no_ints = size / sizeof(int32_t);
 
 	for (unsigned int i = 0; i < no_ints; i += 2)
 	{
