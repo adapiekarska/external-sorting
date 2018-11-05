@@ -1,9 +1,7 @@
 #include "DataWriter.h"
 
-DataWriter::DataWriter(std::string const & file_path) : DataAccessor(file_path), ofs(file_path, std::ios::binary | std::istream::out)
-{
-	series = 1;
-}
+DataWriter::DataWriter(std::string const & file_path)
+	: DataAccessor(file_path), ofs(file_path, std::ios::binary | std::istream::out), series(1) { }
 
 
 DataWriter::~DataWriter()
