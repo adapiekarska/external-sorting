@@ -18,9 +18,10 @@ public:
 	*/
 	bool eof;
 
+	/**
+	Flag indicating whether the end of series has been reached.
+	*/
 	bool eos;
-
-	bool stop;
 
 	/**
 	Constructors and destructors.
