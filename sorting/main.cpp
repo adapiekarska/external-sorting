@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 
 #include "DataGenerator.h"
 #include "FileGenerator.h"
@@ -20,6 +21,7 @@ typedef struct CONFIG
 	bool valid;
 	bool step_by_step;
 	bool verbosity;
+	size_t tapes;
 	input_mode input_mode;
 	std::string input_file_path;
 } CONFIG;
@@ -30,11 +32,9 @@ CONFIG parse_args(int argc, char** argv)
 	config.valid = true;
 	config.step_by_step = false;
 	config.verbosity = false;
+	config.tapes = 2;
 	config.input_mode = NONE;
 	config.input_file_path = "";
-
-	//if (argc == 0)
-	//	config.valid = false;
 
 	std::vector<std::string> opts;
 	for (int i = 1; i < argc; ++i)
@@ -53,6 +53,27 @@ CONFIG parse_args(int argc, char** argv)
 		else if (opt == "-v" || opt == "--verbose")
 		{
 			config.verbosity = true;
+		}
+		else if (opt == "-t" || opt == "--tapes")
+		{
+			if (i != opts.size() - 1)
+			{
+					// omit the number of tapes in argument parsing
+					if (!opts[i + 1].empty() && std::all_of(opts[i+1].begin(), opts[i+1].end(), ::isdigit))
+					{
+						config.tapes = static_cast<size_t>(std::stoi(opts[i + 1]));
+						i++;
+					}
+					else
+					{
+						std::cout << "Missing tapes number after " << opt << std::endl;
+						config.valid = false;
+					}
+			}
+			else
+			{
+				config.valid = false;
+			}
 		}
 		else if (opt == "-r" || opt == "--random")
 		{
@@ -116,7 +137,7 @@ CONFIG parse_args(int argc, char** argv)
 		}
 		else if (opt == "-h" || opt == "--help")
 		{
-			std::cout << 
+			std::cout <<
 				"Options:\n"
 				"\n"
 				"	-r, --random\n"
@@ -138,7 +159,13 @@ CONFIG parse_args(int argc, char** argv)
 				"\n"
 				"	-v, --verbose\n"
 				"		Sets maximum verbosity level. This means displaying each tape during the\n"
-				"		sorting process.\n";
+				"		sorting process.\n"
+				"\n"
+				"	-t, --tapes [TAPES_NUM]\n"
+				"		Sets the number of tapes used in distribution phase. Default is 2.\n"
+				"\n"
+				"	-h, --help\n"
+				"		Displays this message.\n";
 			config.valid = false;
 		}
 		else
@@ -159,9 +186,10 @@ int main(int argc, char** argv)
 {
 	CONFIG config = parse_args(argc, argv);
 	std::cout << "valid: " << config.valid << std::endl;
-	std::cout << "input_mode" << config.input_mode << std::endl;
-	std::cout << "step by step" << config.step_by_step << std::endl;
-	std::cout << "verbosity" << config.verbosity << std::endl;
+	std::cout << "input_mode " << config.input_mode << std::endl;
+	std::cout << "step by step " << config.step_by_step << std::endl;
+	std::cout << "verbosity " << config.verbosity << std::endl;
+	std::cout << "tapes " << config.tapes << std::endl;
 
 	if (!config.valid)
 		return -1;
@@ -195,7 +223,7 @@ int main(int argc, char** argv)
 
 	Sorter sorter("input/data3");
 	//Sorter sorter("data5");
-	sorter.sort(config.step_by_step, config.verbosity, 3);
+	sorter.sort(config.step_by_step, config.verbosity, config.tapes);
 
 	system("pause");
 	return 0;

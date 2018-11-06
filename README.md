@@ -10,6 +10,21 @@ The project's goal is to demonstrate the external sorting alghorithms. The progr
 1. Clone or download the repository.
 2. To build the solution, either you'll need to open the project directly in Visual Studio IDE or use the `devenv` command line tool shipped with Microsoft Windows SDK. In order to use this tool to build the project, open the Visual Studio Developer Command Prompt and type `devenv /build Debug PATH_TO_SLN_FILE`.
 
+## Usage
+
+### Command line options
+| Short option | Long option      | Argument      | Description                                                                               |
+|--------------|------------------|---------------|-------------------------------------------------------------------------------------------|
+| `-r`         | `--random`       |               | Randomly generates input file.                                                            |
+| `-f`         | `--file`         | `[FILE_PATH]` | By supplying this option, the user is allowed to specify a path to the binary input file. |
+| `-u`         | `--user`         |               | Guides user through the process of typing the records with the keyboard.                  |
+| `-s`         | `--step-by-step` |               | Lets user go through sorting step by step. This option also sets maximum verbosity.       |
+| `-v`         | `--verbose`      |               | Sets maximum verbosity level. This means displaying each tape during the sorting process. |
+| `-t`         | `--tapes`        | `[TAPES_NUM]` | Sets the number of tapes used in distribution phase. Default is 2.                        |
+| `-h`         | `--help`         |               | Outputs help message.                                                                     |
+
+If none of the flags `-r`, `-f` and `-u` is specified, the input is generated randomly just as if `-r` flag was provided.
+
 ## Input data
 
 ### File format
@@ -32,18 +47,4 @@ Sample input files can be found in [input subdirectory](sorting/input) of the pr
 
 ### Sorting criteria
 As for now the sorting criteria is fixed to be the euclidian norm of the vector.
-
-## Usage
-
-### Command line options
-| Short option | Long option      | Argument      | Description                                                                               |
-|--------------|------------------|---------------|-------------------------------------------------------------------------------------------|
-| `-r`         | `--random`       |               | Randomly generates input file.                                                            |
-| `-f`         | `--file`         | `[FILE_PATH]` | By supplying this option, the user is allowed to specify a path to the binary input file. |
-| `-u`         | `--user`         |               | Guides user through the process of typing the records with the keyboard.                  |
-| `-s`         | `--step-by-step` |               | Lets user go through sorting step by step. This option also sets maximum verbosity.       |
-| `-v`         | `--verbose`      |               | Sets maximum verbosity level. This means displaying each tape during the sorting process. |
-| `-h`         | `--help`         |               | Outputs help message.                                                                     |
-
-If none of the flags `-r`, `-f` and `-u` is specified, the input is generated randomly just as if `-r` flag was provided.
 
