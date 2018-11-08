@@ -46,7 +46,6 @@ void Sorter::sort(bool step_by_step, bool verbose, size_t tapes, size_t buffer_s
 
 	if (verbose || step_by_step)
 	{
-		std::cout << "SORTED." << std::endl;
 		std::cout << "After sort: " << std::endl;
 		displayer.display(main_file_path, buffer_size);
 	}
