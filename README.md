@@ -23,6 +23,7 @@ The project's goal is to demonstrate the external sorting alghorithms. The progr
 | `-t`         | `--tapes`        | `[TAPES_NUM]` | Sets the number of tapes used in distribution phase. Default is 2.                                          |
 | `-b`         | `--buffer`       | `[BUFF_SIZE]` | Sets the buffer size in bytes. The buffer size must be divisible by the record byte length. Default is ??B. |
 | `-h`         | `--help`         |               | Outputs help message.                                                                                       |
+
 If none of the flags `-r`, `-f` and `-u` is specified, the input is generated randomly just as if `-r` flag was provided.
 
 ## Input data
@@ -31,6 +32,8 @@ If none of the flags `-r`, `-f` and `-u` is specified, the input is generated ra
 
 Input file should be a raw binary file containing the **database of the records**. See [record information](###Records) on more on how each record should be composed.
 If you are using `-f` option and supplying your hand-generated file, please make sure your file is prepared correctly.
+
+Note that the specified input file is overwritten entirely during the sort process.
 
 ### Records
 The assumption is made that the single record is the 2D vector. Therefore each record in the binary file should be a pair of 4-byte long integers. This implies that the **byte length of the file should be divisible by 8**, since each record should be exactly 8-byte long.

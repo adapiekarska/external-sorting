@@ -21,6 +21,7 @@ typedef struct CONFIG
 	bool valid;
 	bool step_by_step;
 	bool verbosity;
+	size_t buffer_size;		// must be divisible by 8
 	size_t tapes;
 	input_mode input_mode;
 	std::string input_file_path;
@@ -32,6 +33,7 @@ CONFIG parse_args(int argc, char** argv)
 	config.valid = true;
 	config.step_by_step = false;
 	config.verbosity = false;
+	config.buffer_size = 40;
 	config.tapes = 2;
 	config.input_mode = NONE;
 	config.input_file_path = "";
@@ -54,24 +56,56 @@ CONFIG parse_args(int argc, char** argv)
 		{
 			config.verbosity = true;
 		}
-		else if (opt == "-t" || opt == "--tapes")
+		else if (opt == "-b" || opt == "--buffer")
 		{
 			if (i != opts.size() - 1)
 			{
-					// omit the number of tapes in argument parsing
-					if (!opts[i + 1].empty() && std::all_of(opts[i+1].begin(), opts[i+1].end(), ::isdigit))
+				// omit the buffer size in argument parsing
+				if (!opts[i + 1].empty() && std::all_of(opts[i + 1].begin(), opts[i + 1].end(), ::isdigit))
+				{
+					size_t buffer_size = static_cast<size_t>(std::stoi(opts[i + 1]));
+					if (buffer_size % (sizeof(int) * VEC_DIM)  == 0)
 					{
-						config.tapes = static_cast<size_t>(std::stoi(opts[i + 1]));
+						config.buffer_size = buffer_size;
 						i++;
 					}
 					else
 					{
-						std::cout << "Missing tapes number after " << opt << std::endl;
+						std::cout << "Buffer size must be divisible by " << sizeof(int) * VEC_DIM << std::endl;
 						config.valid = false;
 					}
+				}
+				else
+				{
+					std::cout << "Missing buffer size after " << opt << std::endl;
+					config.valid = false;
+				}
 			}
 			else
 			{
+				std::cout << "Missing buffer size after " << opt << std::endl;
+				config.valid = false;
+			}
+		}
+		else if (opt == "-t" || opt == "--tapes")
+		{
+			if (i != opts.size() - 1)
+			{
+				// omit the number of tapes in argument parsing
+				if (!opts[i + 1].empty() && std::all_of(opts[i+1].begin(), opts[i+1].end(), ::isdigit))
+				{
+					config.tapes = static_cast<size_t>(std::stoi(opts[i + 1]));
+					i++;
+				}
+				else
+				{
+					std::cout << "Missing tapes number after " << opt << std::endl;
+					config.valid = false;
+				}
+			}
+			else
+			{
+				std::cout << "Missing tapes number after " << opt << std::endl;
 				config.valid = false;
 			}
 		}
@@ -164,6 +198,11 @@ CONFIG parse_args(int argc, char** argv)
 				"	-t, --tapes [TAPES_NUM]\n"
 				"		Sets the number of tapes used in distribution phase. Default is 2.\n"
 				"\n"
+				"	-b, --buffer [BUFF_SIZE]\n"
+				"\n"
+				"		Sets the buffer size in bytes. The buffer size must be divisible by the\n"
+				"		record byte length. Default is ??B.\n"
+				"\n"
 				"	-h, --help\n"
 				"		Displays this message.\n";
 			config.valid = false;
@@ -190,6 +229,9 @@ int main(int argc, char** argv)
 	std::cout << "step by step " << config.step_by_step << std::endl;
 	std::cout << "verbosity " << config.verbosity << std::endl;
 	std::cout << "tapes " << config.tapes << std::endl;
+	std::cout << "buffer size in bytes: " << config.buffer_size << std::endl;
+
+	system("pause");
 
 	if (!config.valid)
 		return -1;
@@ -222,8 +264,7 @@ int main(int argc, char** argv)
 	}
 
 	Sorter sorter("input/data3");
-	//Sorter sorter("data5");
-	sorter.sort(config.step_by_step, config.verbosity, config.tapes);
+	sorter.sort(config.step_by_step, config.verbosity, config.tapes, config.buffer_size);
 
 	system("pause");
 	return 0;

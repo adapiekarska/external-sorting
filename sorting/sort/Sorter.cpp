@@ -50,6 +50,7 @@ void Sorter::sort(bool step_by_step, bool verbose, size_t tapes, size_t buffer_s
 		displayer.display(main_file_path, buffer_size);
 	}
 
+	std::cout << "File sorted." << std::endl;
 	std::cout << "Phases: " << phase << std::endl;
 	std::cout << "Disk operations: " << disk_ops << std::endl;
 }
