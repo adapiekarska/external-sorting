@@ -26,16 +26,6 @@ private:
 	std::string main_file_path;
 
 	/**
-	Number of tapes to distribute over.
-	*/
-	//size_t tapes;
-
-	/**
-	Size of the buffer, in bytes.
-	*/
-	//size_t buffer_size;
-
-	/**
 	Counter of the disk operations.
 	*/
 	size_t disk_ops;
@@ -56,6 +46,4 @@ private:
 	with the stopped reader.
 	*/
 	size_t min(std::vector<Int32_Vec> const & fronts, std::vector<bool> & stopped) const;
-
-	void update_disk_ops(std::vector<DataAccessor*> accessors);
 };

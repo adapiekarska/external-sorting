@@ -55,6 +55,55 @@ void Sorter::sort(bool step_by_step, bool verbose, size_t tapes, size_t buffer_s
 	std::cout << "Disk operations: " << disk_ops << std::endl;
 }
 
+void Sorter::distribute(size_t tapes, size_t buffer_size)
+{
+	DataReader input_reader(main_file_path, buffer_size);
+	std::vector<DataWriter*> tape_writers;
+	for (size_t i = 0; i < tapes; i++)
+		tape_writers.push_back(new DataWriter("tape"+std::to_string(i), buffer_size));
+
+	Int32_Vec prev_r, r;
+
+	size_t current_writer_idx = 0;
+	
+	DataWriter* current_writer = tape_writers.at(current_writer_idx);
+
+	// put the first record from the reader onto the first tape
+	prev_r = input_reader.get_next();
+	current_writer->put_next(prev_r);
+
+	while (true)
+	{
+		r = input_reader.get_next();
+
+		if (input_reader.eof)
+			break;
+
+		if (r >= prev_r)
+			current_writer->put_next(r);
+		else
+		{
+			// change the tape
+			current_writer_idx++;
+			current_writer_idx %= tape_writers.size();
+			current_writer = tape_writers.at(current_writer_idx);
+			current_writer->put_next(r);
+		}
+		prev_r = r;
+	}
+
+	// update disk operations counter
+	for (DataWriter * writer : tape_writers)
+		disk_ops += writer->disk_ops;
+	disk_ops += input_reader.disk_ops;
+
+	// delete tape writers pointers
+	for (std::vector< DataWriter* >::iterator it = tape_writers.begin(); it != tape_writers.end(); ++it)
+		delete (*it);
+	tape_writers.clear();
+}
+
+
 size_t Sorter::merge(size_t tapes, size_t buffer_size)
 {
 	std::vector<DataReader*> tape_readers;
@@ -148,54 +197,6 @@ size_t Sorter::merge(size_t tapes, size_t buffer_size)
 	return output_writer.series;
 }
 
-void Sorter::distribute(size_t tapes, size_t buffer_size)
-{
-	DataReader input_reader(main_file_path, buffer_size);
-	std::vector<DataWriter*> tape_writers;
-	for (size_t i = 0; i < tapes; i++)
-		tape_writers.push_back(new DataWriter("tape"+std::to_string(i), buffer_size));
-
-	Int32_Vec prev_r, r;
-
-	size_t current_writer_idx = 0;
-	
-	DataWriter* current_writer = tape_writers.at(current_writer_idx);
-
-	// put the first record from the reader onto the first tape
-	prev_r = input_reader.get_next();
-	current_writer->put_next(prev_r);
-
-	while (true)
-	{
-		r = input_reader.get_next();
-
-		if (input_reader.eof)
-			break;
-
-		if (r >= prev_r)
-			current_writer->put_next(r);
-		else
-		{
-			// change the tape
-			current_writer_idx++;
-			current_writer_idx %= tape_writers.size();
-			current_writer = tape_writers.at(current_writer_idx);
-			current_writer->put_next(r);
-		}
-		prev_r = r;
-	}
-
-	// update disk operations counter
-	for (DataWriter * writer : tape_writers)
-		disk_ops += writer->disk_ops;
-	disk_ops += input_reader.disk_ops;
-
-	// delete tape writers pointers
-	for (std::vector< DataWriter* >::iterator it = tape_writers.begin(); it != tape_writers.end(); ++it)
-		delete (*it);
-	tape_writers.clear();
-}
-
 size_t Sorter::min(std::vector<Int32_Vec> const & fronts, std::vector<bool> & stopped) const
 {
 	size_t min;
@@ -215,10 +216,4 @@ size_t Sorter::min(std::vector<Int32_Vec> const & fronts, std::vector<bool> & st
 	}
 
 	return min;
-}
-
-void Sorter::update_disk_ops(std::vector<DataAccessor*> accessors)
-{
-	for (DataAccessor* accessor : accessors)
-		disk_ops += accessor->disk_ops;
 }
