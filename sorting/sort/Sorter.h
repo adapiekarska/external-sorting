@@ -10,7 +10,8 @@ class Sorter
 public:
 
 	Sorter(std::string const & main_file_path);
-	~Sorter() {};
+
+	~Sorter() { };
 
 	/**
 	Sorts the input file associated with the Sorter object.

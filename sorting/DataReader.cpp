@@ -47,6 +47,7 @@ size_t DataReader::load_buffer()
 	for (unsigned int i = 0; i < no_ints; i += 2)
 	{
 		int32_t first = 0, second = 0;
+
 		// the bytes were written to file in reversed order
 		for (int j = 0; j < 4; j++)
 		{

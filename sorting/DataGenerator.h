@@ -18,9 +18,15 @@ public:
 	*/
 	std::vector<Int32_Vec> random_generate(size_t n, int from, int to) const;
 
+	/**
+	Interactively guides the user through the process of generating the set of
+	records by hand.
+	*/
 	std::vector<Int32_Vec> user_generate() const;
 
-	DataGenerator() {};
-	~DataGenerator() {};
+	DataGenerator() { };
+
+	~DataGenerator() { };
+
 };
 

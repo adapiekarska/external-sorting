@@ -10,9 +10,7 @@ std::vector<Int32_Vec> DataGenerator::random_generate(size_t n, int from, int to
 	std::uniform_int_distribution<> distr(from, to);
 
 	while (n--)
-	{
 		data.push_back(Int32_Vec(distr(eng), distr(eng)));
-	}
 
 	return data;
 }
@@ -26,6 +24,7 @@ std::vector<Int32_Vec> DataGenerator::user_generate() const
 	std::string line;
 
 	int32_t first, second;
+	
 	do
 	{
 		std::getline(std::cin, line);

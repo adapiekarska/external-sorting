@@ -10,8 +10,9 @@ class FileGenerator
 {
 public:
 
+	~FileGenerator() { };
+
 	FileGenerator(std::string path);
-	~FileGenerator();
 
 	/**
 	Writes a vector of Int32_Vecs into a binary file. The contents
@@ -20,5 +21,6 @@ public:
 	void write(std::vector<Int32_Vec> &v);
 
 private:
+
 	std::string path;
 };

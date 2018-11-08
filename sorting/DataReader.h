@@ -39,6 +39,9 @@ private:
 	
 	std::ifstream ifs;
 
+	/**
+	Most recently read record. Used to recognizing end of series.
+	*/
 	Int32_Vec last_read;
 
 	/**

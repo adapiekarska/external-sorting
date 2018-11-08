@@ -9,8 +9,11 @@
 class Int32_Vec
 {
 public:
-	Int32_Vec();
+
+	Int32_Vec() { };
+	
 	Int32_Vec(int32_t first, int32_t second);
+	
 	~Int32_Vec();
 
 	/**
@@ -24,8 +27,10 @@ public:
 	friend std::ostream &operator<<(std::ostream &output, const Int32_Vec &vec);
 
 	int32_t first;
+
 	int32_t second;
 
 private:
+	
 	double length;
 };

@@ -31,7 +31,7 @@ private:
 	std::ofstream ofs;
 
 	/**
-	The record that was last put.
+	The record that was last put. Used for recognizing end of series.
 	*/
 	Int32_Vec last_put;
 
