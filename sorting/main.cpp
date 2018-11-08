@@ -28,6 +28,9 @@ typedef struct CONFIG
 	std::string input_file_path;
 } CONFIG;
 
+/**
+Parses command line arguments.
+*/
 CONFIG parse_args(int argc, char** argv)
 {
 	CONFIG config;

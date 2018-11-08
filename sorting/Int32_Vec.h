@@ -4,6 +4,10 @@
 #include <cstdint>
 #include <cmath>
 
+/**
+ * Class representing the 2D vector, holding two 4 bytes integer
+ * values.
+ */
 
 // TODO make this class support arbitrary number of dimensions
 class Int32_Vec
@@ -16,9 +20,6 @@ public:
 	
 	~Int32_Vec();
 
-	/**
-	Comparison operators.
-	*/
 	friend bool operator> (const Int32_Vec& v1, const Int32_Vec& v2);
 	friend bool operator>= (const Int32_Vec &v1, const Int32_Vec& v2);
 	friend bool operator< (const Int32_Vec& v1, const Int32_Vec& v2);

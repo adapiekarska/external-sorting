@@ -8,9 +8,18 @@
 #include "Int32_Vec.h"
 #include "globals.h"
 
+/**
+ * Class responsible for handling all methods of generating input data in the
+ * the program, i.e. randomised generation and user generation.
+ */
+
 class DataGenerator
 {
 public:
+
+	DataGenerator() { };
+
+	~DataGenerator() { };
 
 	/**
 	Generates the vector of size n that contains randomly generated pairs of
@@ -23,10 +32,6 @@ public:
 	records by hand.
 	*/
 	std::vector<Int32_Vec> user_generate() const;
-
-	DataGenerator() { };
-
-	~DataGenerator() { };
 
 };
 
