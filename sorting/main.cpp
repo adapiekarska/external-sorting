@@ -21,8 +21,9 @@ typedef struct CONFIG
 	bool valid;
 	bool step_by_step;
 	bool verbosity;
-	size_t buffer_size;		// must be divisible by 8
+	size_t buffer_size;
 	size_t tapes;
+	size_t records;
 	input_mode input_mode;
 	std::string input_file_path;
 } CONFIG;
@@ -35,6 +36,7 @@ CONFIG parse_args(int argc, char** argv)
 	config.verbosity = false;
 	config.buffer_size = 40;
 	config.tapes = 2;
+	config.records = 1000;
 	config.input_mode = NONE;
 	config.input_file_path = "";
 
@@ -92,7 +94,7 @@ CONFIG parse_args(int argc, char** argv)
 			if (i != opts.size() - 1)
 			{
 				// omit the number of tapes in argument parsing
-				if (!opts[i + 1].empty() && std::all_of(opts[i+1].begin(), opts[i+1].end(), ::isdigit))
+				if (std::all_of(opts[i+1].begin(), opts[i+1].end(), ::isdigit))
 				{
 					config.tapes = static_cast<size_t>(std::stoi(opts[i + 1]));
 					i++;
@@ -111,16 +113,24 @@ CONFIG parse_args(int argc, char** argv)
 		}
 		else if (opt == "-r" || opt == "--random")
 		{
-			if (config.input_mode == input_mode::IN_USER ||
-				config.input_mode == input_mode::IN_FILE)
+			if (i != opts.size() - 1)
 			{
-				std::cout << "Invalid option " << opt << " if config mode "
-					<< config.input_mode << " specified before." << std::endl;
-				config.valid = false;
-			}
-			else
-			{
-				config.input_mode = input_mode::IN_RANDOM;
+				if (config.input_mode == input_mode::IN_USER ||
+					config.input_mode == input_mode::IN_FILE)
+				{
+					std::cout << "Invalid option " << opt << " if config mode "
+						<< config.input_mode << " specified before." << std::endl;
+					config.valid = false;
+				}
+				else
+				{
+					if (std::all_of(opts[i + 1].begin(), opts[i + 1].end(), ::isdigit))
+					{
+						config.input_mode = input_mode::IN_RANDOM;
+						config.records = static_cast<size_t>(std::stoi(opts[i + 1]));
+						i++;
+					}
+				}
 			}
 		}
 		else if (opt == "-f" || opt == "--file")
@@ -137,9 +147,9 @@ CONFIG parse_args(int argc, char** argv)
 				else
 				{
 					// omit the file path in argument parsing
-					config.input_mode = input_mode::IN_FILE;
 					if (opts[i + 1][0] != '-')
 					{
+						config.input_mode = input_mode::IN_FILE;
 						config.input_file_path = opts[i + 1];
 						i++;
 					}
@@ -174,8 +184,9 @@ CONFIG parse_args(int argc, char** argv)
 			std::cout <<
 				"Options:\n"
 				"\n"
-				"	-r, --random\n"
-				"		Randomly generates input file.\n"
+				"	-r [RECORDS_NUM], --random [RECORDS_NUM]\n"
+				"		Randomly generates input file containing RECORDS_NUM records. Default is\n"
+				"		1000.\n"
 				"\n"
 				"	-f [FILE_PATH], --file [FILE_PATH]\n"
 				"		By supplying this option, the user is allowed to specify a path to the\n"
@@ -229,6 +240,7 @@ int main(int argc, char** argv)
 	std::cout << "step by step " << config.step_by_step << std::endl;
 	std::cout << "verbosity " << config.verbosity << std::endl;
 	std::cout << "tapes " << config.tapes << std::endl;
+	std::cout << "record nums " << config.records << std::endl;
 	std::cout << "buffer size in bytes: " << config.buffer_size << std::endl;
 
 	system("pause");
