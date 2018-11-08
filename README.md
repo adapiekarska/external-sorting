@@ -14,7 +14,7 @@ The project's goal is to demonstrate the external sorting alghorithms. The progr
 
 ### Command line options
 | Short option | Long option      | Argument      | Description                                                                                                 |
-|--------------|------------------|---------------|-------------------------------------------------------------------------------------------------------------|
+|:------------:|:-----------------|:-------------:|-------------------------------------------------------------------------------------------------------------|
 | `-r`         | `--random`       |               | Randomly generates input file.                                                                              |
 | `-f`         | `--file`         | `[FILE_PATH]` | By supplying this option, the user is allowed to specify a path to the binary input file.                   |
 | `-u`         | `--user`         |               | Guides user through the process of typing the records with the keyboard.                                    |
