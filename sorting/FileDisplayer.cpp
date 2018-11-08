@@ -9,7 +9,11 @@ void FileDisplayer::display(std::string const & file_path, size_t buffer_size)
 	{
 		r = reader.get_next();
 		if (!reader.eof)
+		{
+			if (reader.eos)
+				std::cout << "|   ";
 			std::cout << r << "   ";
+		}
 		else
 			break;
 	}

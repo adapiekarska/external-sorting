@@ -8,6 +8,9 @@ DataReader::~DataReader() { ifs.close(); }
 
 Int32_Vec DataReader::get_next()
 {
+	if (eos == true)
+		eos = false;
+
 	if (buffer.empty())
 		if (load_buffer() == 0 )
 		{
