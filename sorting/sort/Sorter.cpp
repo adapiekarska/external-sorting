@@ -1,20 +1,16 @@
 #include "Sorter.h"
 
 
-Sorter::Sorter(std::string const & main_file_path) : disk_ops(0), main_file_path(main_file_path)
-{
-}
+Sorter::Sorter(std::string const & main_file_path) : disk_ops(0), main_file_path(main_file_path) { }
 
-void Sorter::sort(bool step_by_step, bool verbose, size_t tapes)
+void Sorter::sort(bool step_by_step, bool verbose, size_t tapes, size_t buffer_size)
 {
-	this->tapes = tapes;
-
 	FileDisplayer displayer;
 
 	if (verbose || step_by_step)
 	{
 		std::cout << "Before sort: " << std::endl;
-		displayer.display(main_file_path);
+		displayer.display(main_file_path, buffer_size);
 		std::cout << std::endl;
 	}
 
@@ -25,20 +21,20 @@ void Sorter::sort(bool step_by_step, bool verbose, size_t tapes)
 		{
 			std::cout << "PHASE " << phase << std::endl;
 		}
-		distribute(main_file_path);
+		distribute(tapes, buffer_size);
 		if (verbose || step_by_step)
 		{
 			for (size_t i = 0; i < tapes; i++)
 			{
 				std::cout << "Tape " << i << ": ";
-				displayer.display("tape" + std::to_string(i));
+				displayer.display("tape" + std::to_string(i), buffer_size);
 			}
 		}
-		series = merge(main_file_path);
+		series = merge(tapes, buffer_size);
 		if (verbose || step_by_step)
 		{
 			std::cout << "Main file: ";
-			displayer.display(main_file_path);
+			displayer.display(main_file_path, buffer_size);
 			std::cout << std::endl;
 		}
 		if (step_by_step)
@@ -52,31 +48,20 @@ void Sorter::sort(bool step_by_step, bool verbose, size_t tapes)
 	{
 		std::cout << "SORTED." << std::endl;
 		std::cout << "After sort: " << std::endl;
-		displayer.display(main_file_path);
+		displayer.display(main_file_path, buffer_size);
 	}
 
 	std::cout << "Phases: " << phase << std::endl;
 	std::cout << "Disk operations: " << disk_ops << std::endl;
 }
 
-void Sorter::copy_until_eof(DataReader & reader, DataWriter & writer, Int32_Vec &r)
-{
-	while (true)
-	{
-		r = reader.get_next();
-		if (reader.eof)
-			return;
-		writer.put_next(r);
-	}
-}
-
-size_t Sorter::merge(std::string const & output_file_path)
+size_t Sorter::merge(size_t tapes, size_t buffer_size)
 {
 	std::vector<DataReader*> tape_readers;
 	for (size_t i = 0; i < tapes; i++)
-		tape_readers.push_back(new DataReader("tape" + std::to_string(i)));
+		tape_readers.push_back(new DataReader("tape" + std::to_string(i), buffer_size));
 
-	DataWriter output_writer(output_file_path);
+	DataWriter output_writer(main_file_path, buffer_size);
 
 	// vector of front records from all of the tapes
 	std::vector<Int32_Vec> fronts;
@@ -106,7 +91,6 @@ size_t Sorter::merge(std::string const & output_file_path)
 
 	// merging loop
 
-	//unsigned int idx;
 	DataReader* current_reader;
 	while (true)
 	{
@@ -125,6 +109,10 @@ size_t Sorter::merge(std::string const & output_file_path)
 		if (current_reader->eof)
 		{
 			// current reader has reached end of file
+			// update disk operations counter
+			disk_ops += tape_readers.at(idx)->disk_ops;
+
+			delete tape_readers.at(idx);
 			tape_readers.erase(tape_readers.begin() + idx);
 			fronts.erase(fronts.begin() + idx);
 			stopped.erase(stopped.begin() + idx);
@@ -154,25 +142,18 @@ size_t Sorter::merge(std::string const & output_file_path)
 	}
 
 	// update disk operations counter
-	for (DataReader * reader : tape_readers)
-		disk_ops += reader->disk_ops;
 	disk_ops += output_writer.disk_ops;
-
-	// delete tape readers pointers
-	for (std::vector< DataReader* >::iterator it = tape_readers.begin(); it != tape_readers.end(); ++it)
-		delete (*it);
-	tape_readers.clear();
 
 	// return number of series written by the output writer
 	return output_writer.series;
 }
 
-void Sorter::distribute(std::string const &input_file_path)
+void Sorter::distribute(size_t tapes, size_t buffer_size)
 {
-	DataReader input_reader(input_file_path);
+	DataReader input_reader(main_file_path, buffer_size);
 	std::vector<DataWriter*> tape_writers;
 	for (size_t i = 0; i < tapes; i++)
-		tape_writers.push_back(new DataWriter("tape"+std::to_string(i)));
+		tape_writers.push_back(new DataWriter("tape"+std::to_string(i), buffer_size));
 
 	Int32_Vec prev_r, r;
 

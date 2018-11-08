@@ -15,7 +15,7 @@ public:
 	/**
 	Sorts the input file associated with the Sorter object.
 	*/
-	void sort(bool step_by_step, bool verbose, size_t tapes);
+	void sort(bool step_by_step, bool verbose, size_t tapes, size_t buffer_size);
 
 
 private:
@@ -28,7 +28,12 @@ private:
 	/**
 	Number of tapes to distribute over.
 	*/
-	size_t tapes;
+	//size_t tapes;
+
+	/**
+	Size of the buffer, in bytes.
+	*/
+	//size_t buffer_size;
 
 	/**
 	Counter of the disk operations.
@@ -36,24 +41,15 @@ private:
 	size_t disk_ops;
 
 	/**
-	Copies records from the tape associated with reader to the tape associated with
-	writer until the end of file is reached. Note that r must be a reference to
-	the record that was last put in the data writer's buffer. The value referenced
-	by r at the moment of calling the function will NOT be copied to the writer's
-	tape.
-	*/
-	void copy_until_eof(DataReader & reader, DataWriter & writer, Int32_Vec &r);
-
-	/**
 	Distributes series of records from input file accross the tapes.
 	*/
-	void distribute(std::string const & input_file_path);
+	void distribute(size_t tapes, size_t buffer_size);
 
 	/**
 	Merges records from the tapes into output file. Returns the number of series
 	written to the output file.
 	*/
-	size_t merge(std::string const &output_file_path);
+	size_t merge(size_t tapes, size_t buffer_size);
 
 	/**
 	Returns the index of the smallest element in the fronts vector that is not associated

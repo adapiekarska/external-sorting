@@ -1,8 +1,8 @@
 #include "FileDisplayer.h"
 
-void FileDisplayer::display(std::string const & file_path)
+void FileDisplayer::display(std::string const & file_path, size_t buffer_size)
 {
-	DataReader reader(file_path);
+	DataReader reader(file_path, buffer_size);
 	Int32_Vec r;
 
 	while (true)

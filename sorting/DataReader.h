@@ -26,7 +26,8 @@ public:
 	/**
 	Constructors and destructors.
 	*/
-	DataReader(std::string const & file_path);
+	DataReader(std::string const & file_path, size_t buffer_size);
+
 	~DataReader();
 
 	/**
@@ -35,6 +36,7 @@ public:
 	Int32_Vec get_next();
 
 private:
+	
 	std::ifstream ifs;
 
 	Int32_Vec last_read;

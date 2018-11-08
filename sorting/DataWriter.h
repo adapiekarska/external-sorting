@@ -16,7 +16,8 @@ public:
 	*/
 	unsigned int series;
 
-	DataWriter(std::string const & file_path);
+	DataWriter(std::string const & file_path, size_t buffer_size);
+
 	~DataWriter();
 
 	/**

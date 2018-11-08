@@ -1,7 +1,7 @@
 #include "DataWriter.h"
 
-DataWriter::DataWriter(std::string const & file_path)
-	: DataAccessor(file_path), ofs(file_path, std::ios::binary | std::istream::out), series(1) { }
+DataWriter::DataWriter(std::string const & file_path, size_t buffer_size)
+	: DataAccessor(file_path, buffer_size), ofs(file_path, std::ios::binary | std::istream::out), series(1) { }
 
 
 DataWriter::~DataWriter()
@@ -21,7 +21,7 @@ void DataWriter::put_next(Int32_Vec r)
 			series++;
 
 	buffer.push_back(r);
-	if (buffer.size() == BUFFER_SIZE)
+	if (buffer.size() == buffer_size)
 		write_buffer();
 	last_put = r;
 }

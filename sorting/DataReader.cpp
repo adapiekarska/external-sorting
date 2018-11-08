@@ -1,8 +1,8 @@
 #include "DataReader.h"
 
 
-DataReader::DataReader(std::string const & file_path) 
-	: DataAccessor(file_path), ifs(file_path, std::ios::binary | std::istream::in), eof(false), eos(false) { }
+DataReader::DataReader(std::string const & file_path, size_t buffer_size) 
+	: DataAccessor(file_path, buffer_size), ifs(file_path, std::ios::binary | std::istream::in), eof(false), eos(false) { }
 
 DataReader::~DataReader() { ifs.close(); }
 
@@ -29,7 +29,7 @@ Int32_Vec DataReader::get_next()
 size_t DataReader::load_buffer()
 {
 	// number of bytes that have to be read from the file
-	size_t size = BUFFER_SIZE * sizeof(int32_t) * VEC_DIM;
+	size_t size = buffer_size * sizeof(int32_t) * VEC_DIM;
 
 	std::vector<char> bytes(size);
 	ifs.read(&bytes.at(0), size);
