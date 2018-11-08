@@ -43,7 +43,7 @@ Sample input files can be found in [input subdirectory](sorting/input) of the pr
 ### Sorting methods
 
 * Natural merge sort
-* Polyphase merge sort
+* Polyphase merge sort - *to be implemented in the future*
 
 ### Sorting criteria
 As for now the sorting criteria is fixed to be the euclidian norm of the vector.
