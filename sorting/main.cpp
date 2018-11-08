@@ -256,7 +256,7 @@ int main(int argc, char** argv)
 	{
 		case input_mode::IN_RANDOM:
 		{
-			data = data_generator.random_generate(config.records, 0, 10);
+			data = data_generator.random_generate(config.records, -100, 100);
 			input_file_name = "input/data";
 			FileGenerator file_generator(input_file_name);
 			file_generator.write(data);
@@ -278,7 +278,7 @@ int main(int argc, char** argv)
 	}
 
 	Sorter sorter("input/data");
-	sorter.sort(config.step_by_step, config.verbosity, config.tapes, config.buffer_size);
+	sorter.sort(config.step_by_step, config.verbosity, config.tapes, config.buffer_size / (sizeof(int) * VEC_DIM));
 
 	system("pause");
 	return 0;

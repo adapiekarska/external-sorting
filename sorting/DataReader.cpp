@@ -11,6 +11,8 @@ Int32_Vec DataReader::get_next()
 	if (eos == true)
 		eos = false;
 
+	size_t disk_ops_before_load = disk_ops;
+
 	if (buffer.empty())
 		if (load_buffer() == 0 )
 		{
@@ -22,7 +24,7 @@ Int32_Vec DataReader::get_next()
 	Int32_Vec next = buffer.front();
 	buffer.erase(buffer.begin());
 
-	if (disk_ops != 0 && next < last_read)
+	if (disk_ops_before_load != 0 && next < last_read)
 		eos = true;
 
 	last_read = next;
