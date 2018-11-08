@@ -12,6 +12,7 @@ void FileDisplayer::display(std::string const & file_path, size_t buffer_size)
 		{
 			if (reader.eos)
 				std::cout << "|   ";
+
 			std::cout << r << "   ";
 		}
 		else
