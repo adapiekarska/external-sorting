@@ -66,7 +66,8 @@ CONFIG parse_args(int argc, char** argv)
 			if (i != opts.size() - 1)
 			{
 				// omit the buffer size in argument parsing
-				if (!opts[i + 1].empty() && std::all_of(opts[i + 1].begin(), opts[i + 1].end(), ::isdigit))
+				if (!opts[i + 1].empty() && 
+					std::all_of(opts[i + 1].begin(), opts[i + 1].end(), ::isdigit))
 				{
 					size_t buffer_size = static_cast<size_t>(std::stoi(opts[i + 1]));
 					if (buffer_size % (sizeof(int) * VEC_DIM)  == 0)
@@ -76,7 +77,8 @@ CONFIG parse_args(int argc, char** argv)
 					}
 					else
 					{
-						std::cout << "Buffer size must be divisible by " << sizeof(int) * VEC_DIM << std::endl;
+						std::cout << "Buffer size must be divisible by " 
+							<< sizeof(int) * VEC_DIM << std::endl;
 						config.valid = false;
 					}
 				}
@@ -281,7 +283,7 @@ int main(int argc, char** argv)
 	}
 
 	Sorter sorter(input_file_name);
-	// sorter.sort(config.step_by_step, config.verbosity, config.tapes, config.buffer_size / (sizeof(int) * VEC_DIM));
+	sorter.sort(config.step_by_step, config.verbosity, config.tapes, config.buffer_size / (sizeof(int) * VEC_DIM));
 
 	system("pause");
 	return 0;

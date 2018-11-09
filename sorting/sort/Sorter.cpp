@@ -1,7 +1,8 @@
 #include "Sorter.h"
 
 
-Sorter::Sorter(std::string const & main_file_path) : disk_ops(0), main_file_path(main_file_path) { }
+Sorter::Sorter(std::string const & main_file_path) 
+	: disc_read_ops(0), disc_write_ops(0), main_file_path(main_file_path) { }
 
 void Sorter::sort(bool step_by_step, bool verbose, size_t tapes, size_t buffer_size)
 {
@@ -9,7 +10,7 @@ void Sorter::sort(bool step_by_step, bool verbose, size_t tapes, size_t buffer_s
 
 	if (verbose || step_by_step)
 	{
-		std::cout << "BEFORE SORT: " << std::endl;
+		std::cout << "BEFORE SORT:" << std::endl;
 		std::cout << " main file:   ";
 		displayer.display(main_file_path, buffer_size);
 		system("pause");
@@ -62,9 +63,14 @@ void Sorter::sort(bool step_by_step, bool verbose, size_t tapes, size_t buffer_s
 		std::cout << std::endl;
 	}
 
-	std::cout << "SORT INFORMATION:" << std::endl;
+	std::cout << "============ SORT INFORMATION: ============" << std::endl;
+	std::cout << " number of records: " << std::endl;
+	std::cout << " number of tapes: " << tapes << std::endl;
+	std::cout << " buffer size: " << buffer_size << std::endl;
 	std::cout << " phases: " << phase << std::endl;
-	std::cout << " disk operations: " << disk_ops << std::endl;
+	std::cout << " total disc operations: " << disc_read_ops + disc_write_ops << std::endl;
+	std::cout << " disc read operations: " << disc_read_ops << std::endl;
+	std::cout << " disc write operations: " << disc_write_ops << std::endl;
 }
 
 void Sorter::distribute(size_t tapes, size_t buffer_size)
@@ -106,8 +112,9 @@ void Sorter::distribute(size_t tapes, size_t buffer_size)
 
 	// update disk operations counter
 	for (DataWriter * writer : tape_writers)
-		disk_ops += writer->disk_ops;
-	disk_ops += input_reader.disk_ops;
+		disc_write_ops += writer->disc_ops;
+
+	disc_read_ops += input_reader.disc_ops;
 
 	// delete tape writers pointers
 	for (std::vector< DataWriter* >::iterator it = tape_writers.begin(); it != tape_writers.end(); ++it)
@@ -157,13 +164,13 @@ size_t Sorter::merge(size_t tapes, size_t buffer_size)
 	{
 		// find the smallest record amongst all tapes' fronting records
 		// ignoring the tapes that reached eos
-		size_t idx = min(fronts, stopped);
+		size_t min_tape_idx = min_tape_index(fronts, stopped);
 
 		// put the smallest found record onto the output writer
-		output_writer.put_next(fronts.at(idx));
+		output_writer.put_next(fronts.at(min_tape_idx));
 
 		// update the current reader
-		current_reader = tape_readers.at(idx);
+		current_reader = tape_readers.at(min_tape_idx);
 
 		Int32_Vec record = current_reader->get_next();
 
@@ -171,12 +178,16 @@ size_t Sorter::merge(size_t tapes, size_t buffer_size)
 		{
 			// current reader has reached end of file
 			// update disk operations counter
-			disk_ops += tape_readers.at(idx)->disk_ops;
+			disc_read_ops += tape_readers.at(min_tape_idx)->disc_ops;
 
-			delete tape_readers.at(idx);
-			tape_readers.erase(tape_readers.begin() + idx);
-			fronts.erase(fronts.begin() + idx);
-			stopped.erase(stopped.begin() + idx);
+			// delete the tape reader pointer
+			delete tape_readers.at(min_tape_idx);
+
+			// delete element at the index of the empty tape reader
+			// from all vectors
+			tape_readers.erase(tape_readers.begin() + min_tape_idx);
+			fronts.erase(fronts.begin() + min_tape_idx);
+			stopped.erase(stopped.begin() + min_tape_idx);
 
 			// exit the loop if all of the readers are exhausted
 			if (tape_readers.empty())
@@ -185,11 +196,11 @@ size_t Sorter::merge(size_t tapes, size_t buffer_size)
 		else
 		{
 			// update proper front element
-			fronts.at(idx) = record;
+			fronts.at(min_tape_idx) = record;
 			if (current_reader->eos)
 			{
 				// end of series on the current reader
-				stopped.at(idx) = true;
+				stopped.at(min_tape_idx) = true;
 				stopped_count++;
 			}
 		}
@@ -203,13 +214,13 @@ size_t Sorter::merge(size_t tapes, size_t buffer_size)
 	}
 
 	// update disk operations counter
-	disk_ops += output_writer.disk_ops;
+	disc_write_ops += output_writer.disc_ops;
 
 	// return number of series written by the output writer
 	return output_writer.series;
 }
 
-size_t Sorter::min(std::vector<Int32_Vec> const & fronts, std::vector<bool> & stopped) const
+size_t Sorter::min_tape_index(std::vector<Int32_Vec> const & fronts, std::vector<bool> & stopped) const
 {
 	size_t min;
 	bool min_initialized = false;

@@ -21,7 +21,12 @@ public:
 	/**
 	 * Series counter
 	 */
-	unsigned int series;
+	size_t series;
+
+	/**
+	 * Counter of the disc operations.
+	 */
+	size_t disc_ops;
 
 	DataWriter(std::string const & file_path, size_t buffer_size);
 

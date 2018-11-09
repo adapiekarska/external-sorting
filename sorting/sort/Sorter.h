@@ -28,9 +28,14 @@ private:
 	std::string main_file_path;
 
 	/**
-	 * Counter of the disk operations.
+	 * Counter of the disc read operations.
 	 */
-	size_t disk_ops;
+	size_t disc_read_ops;
+
+	/**
+	 * Counter of the disc write operations.
+	 */
+	size_t disc_write_ops;
 
 	/**
 	 * Distributes series of records from input file accross the tapes.
@@ -47,6 +52,6 @@ private:
 	 * Returns the index of the smallest element in the fronts vector that is not associated
 	 * with the stopped reader.
 	 */
-	size_t min(std::vector<Int32_Vec> const & fronts, std::vector<bool> & stopped) const;
+	size_t min_tape_index(std::vector<Int32_Vec> const & fronts, std::vector<bool> & stopped) const;
 
 };

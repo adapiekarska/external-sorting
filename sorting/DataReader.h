@@ -30,6 +30,11 @@ public:
 	 */
 	bool eos;
 
+	/**
+	* Counter of the disc operations.
+	*/
+	size_t disc_ops;
+
 	DataReader(std::string const & file_path, size_t buffer_size);
 
 	~DataReader();
