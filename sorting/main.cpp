@@ -261,7 +261,7 @@ int main(int argc, char** argv)
 	{
 		case input_mode::IN_RANDOM:
 		{
-			data = data_generator.random_generate(config.records, -100, 100);
+			data = data_generator.random_generate(config.records, MIN_RANGE, MAX_RANGE);
 			input_file_name = "input/data";
 			FileGenerator file_generator(input_file_name);
 			file_generator.write(data);

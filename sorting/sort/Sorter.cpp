@@ -53,8 +53,6 @@ void Sorter::sort(bool step_by_step, bool verbose, size_t tapes, size_t buffer_s
 
 	} while (series > 1);
 
-	std::cout << "File sorted." << std::endl << std::endl;
-
 	if (verbose || step_by_step)
 	{
 		std::cout << "AFTER SORT: " << std::endl;
@@ -63,14 +61,14 @@ void Sorter::sort(bool step_by_step, bool verbose, size_t tapes, size_t buffer_s
 		std::cout << std::endl;
 	}
 
+	size_t width = 20;
 	std::cout << "============ SORT INFORMATION: ============" << std::endl;
-	std::cout << " number of records: " << std::endl;
-	std::cout << " number of tapes: " << tapes << std::endl;
-	std::cout << " buffer size: " << buffer_size << std::endl;
-	std::cout << " phases: " << phase << std::endl;
-	std::cout << " total disc operations: " << disc_read_ops + disc_write_ops << std::endl;
-	std::cout << " disc read operations: " << disc_read_ops << std::endl;
-	std::cout << " disc write operations: " << disc_write_ops << std::endl;
+	std::cout << " number of tapes: "		<< std::setw(width) << tapes << std::endl;
+	std::cout << " buffer size: "			<< std::setw(width) << buffer_size << std::endl;
+	std::cout << " phases: "				<< std::setw(width) << phase << std::endl;
+	std::cout << " total disc operations: " << std::setw(width) << disc_read_ops + disc_write_ops << std::endl;
+	std::cout << " disc read operations: "	<< std::setw(width) << disc_read_ops << std::endl;
+	std::cout << " disc write operations: " << std::setw(width) << disc_write_ops << std::endl;
 }
 
 void Sorter::distribute(size_t tapes, size_t buffer_size)
