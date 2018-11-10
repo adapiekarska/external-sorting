@@ -16,7 +16,6 @@ void ConsoleLogger::log_after_phase(size_t i)
 	for (size_t i = 0; i < sorter->tapes; i++)
 		log_tape_with_name("tape" + std::to_string(i),
 			"t" + std::to_string(i));
-	std::cout << std::endl;
 
 	log_tape_with_name(sorter->main_file_path, "f");
 	std::cout << std::endl;
@@ -33,8 +32,9 @@ void ConsoleLogger::log_final_state()
 {
 	std::cout << std::endl << "File sorted successfully." << std::endl
 		<< "Press any key to see the sorted file and sort information." << std::endl;
-	std::cin.get();
 
+	std::cin.get();
+	std::cout << std::endl;
 	std::cout << "====== AFTER SORT" << std::endl;
 	log_tape_with_name(sorter->main_file_path, "f");
 }

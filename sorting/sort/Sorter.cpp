@@ -26,12 +26,12 @@ size_t Sorter::sort_verbose(bool step_by_step)
 	{
 		distribute();
 		series = merge();
+
+		phases++;
 		console_logger.log_after_phase(phases);
 
 		if (step_by_step)
 			std::cin.get();
-
-		phases++;
 
 	} while (series > 1);
 
