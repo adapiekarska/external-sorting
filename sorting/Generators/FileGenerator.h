@@ -3,8 +3,8 @@
 #include <fstream>
 #include <vector>
 
-#include "globals.h"
-#include "Int32_Vec.h"
+#include "../globals.h"
+#include "../Int32_Vec.h"
 
 
 /**

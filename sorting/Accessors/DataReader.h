@@ -4,11 +4,11 @@
 #include <vector>
 
 #include "DataAccessor.h"
-#include "Int32_Vec.h"
-#include "globals.h"
+#include "../Int32_Vec.h"
+#include "../globals.h"
 
 /**
- * Class handling disk reading operations. Read bytes are interpreted
+ * Class handling disc reading operations. Read bytes are interpreted
  * as records and stored in a buffer, from where a one record is extracted in
  * case the get_next() method is called. Provides the block-read interface
  * for other layers of the application.

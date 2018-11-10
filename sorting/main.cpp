@@ -3,10 +3,10 @@
 
 #include "DataGenerator.h"
 #include "FileGenerator.h"
-#include "DataReader.h"
-#include "DataWriter.h"
+#include "Accessors/DataReader.h"
+#include "Accessors/DataWriter.h"
 #include "Int32_Vec.h"
-#include "sort/Sorter.h"
+#include "Sort/Sorter.h"
 
 enum input_mode
 {

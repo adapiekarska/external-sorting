@@ -1,8 +1,8 @@
 #include <fstream>
 #include <iomanip>
 
-#include "../DataReader.h"
-#include "../DataWriter.h"
+#include "../Accessors/DataReader.h"
+#include "../Accessors/DataWriter.h"
 #include "../FileDisplayer.h"
 
 /**

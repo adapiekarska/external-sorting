@@ -5,8 +5,8 @@
 #include <string>
 #include <sstream>
 
-#include "Int32_Vec.h"
-#include "globals.h"
+#include "../Int32_Vec.h"
+#include "../globals.h"
 
 /**
  * Class responsible for handling all methods of generating input data in the
