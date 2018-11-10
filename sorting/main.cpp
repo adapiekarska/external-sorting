@@ -263,8 +263,8 @@ int main(int argc, char** argv)
 		{
 			data = data_generator.random_generate(config.records, MIN_RANGE, MAX_RANGE);
 			input_file_name = "input/data";
-			FileGenerator file_generator(input_file_name);
-			file_generator.write(data);
+			FileGenerator file_generator;
+			file_generator.generate(data, input_file_name);
 		}
 		break;
 		case input_mode::IN_FILE:
@@ -276,8 +276,8 @@ int main(int argc, char** argv)
 		{
 			data = data_generator.user_generate();
 			input_file_name = "input/data";
-			FileGenerator file_generator(input_file_name);
-			file_generator.write(data);
+			FileGenerator file_generator;
+			file_generator.generate(data, input_file_name);
 		}
 		break;
 	}
@@ -285,6 +285,6 @@ int main(int argc, char** argv)
 	Sorter sorter(input_file_name);
 	sorter.sort(config.step_by_step, config.verbosity, config.tapes, config.buffer_size / (sizeof(int) * VEC_DIM));
 
-	system("pause");
+	std::cin.get();
 	return 0;
 }

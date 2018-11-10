@@ -1,11 +1,8 @@
 #include "FileGenerator.h"
 
-
-FileGenerator::FileGenerator(std::string path) : path(path) { }
-
-void FileGenerator::write(std::vector<Int32_Vec> &v)
+void FileGenerator::generate(std::vector<Int32_Vec> &v, std::string const &path)
 {
-	std::ofstream ofs(this->path, std::ios::binary);
+	std::ofstream ofs(path, std::ios::binary);
 
 	for (unsigned int i = 0; i < v.size(); i++)
 	{
