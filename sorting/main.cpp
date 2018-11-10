@@ -24,7 +24,7 @@ int main(int argc, char** argv)
 		return -1;
 	}
 
-	std::cout << "input_mode " << config_parser.input_mode << std::endl;
+	/*std::cout << "input_mode " << config_parser.input_mode << std::endl;
 	std::cout << "step by step " << config_parser.step_by_step << std::endl;
 	std::cout << "verbosity " << config_parser.verbose << std::endl;
 	std::cout << "tapes " << config_parser.tapes << std::endl;
@@ -32,7 +32,7 @@ int main(int argc, char** argv)
 	std::cout << "buffer size in bytes: " << config_parser.buffer_size << std::endl;
 
 	std::cin.get();
-
+*/
 	DataGenerator data_generator;
 	std::vector<Int32_Vec> data;
 	std::string input_file_name;
