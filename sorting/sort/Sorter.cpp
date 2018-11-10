@@ -10,18 +10,17 @@ void Sorter::sort(bool step_by_step, bool verbose, size_t tapes, size_t buffer_s
 
 	if (verbose || step_by_step)
 	{
-		std::cout << "BEFORE SORT:" << std::endl;
-		std::cout << " main file:   ";
+		std::cout << "====== BEFORE SORT" << std::endl;
+		std::cout << " >  f: ";
 		displayer.display(main_file_path, buffer_size);
 		std::cin.get();
-		std::cout << std::endl;
 	}
 
 	unsigned int series, phase = 0;
 	do
 	{
 		if (verbose || step_by_step)
-			std::cout << "PHASE " << phase << std::endl;
+			std::cout << "====== PHASE " << phase << std::endl;
 		
 		distribute(tapes, buffer_size);
 		
@@ -29,7 +28,7 @@ void Sorter::sort(bool step_by_step, bool verbose, size_t tapes, size_t buffer_s
 		{
 			for (size_t i = 0; i < tapes; i++)
 			{
-				std::cout << " tape " << i << ":      ";
+				std::cout << " > t" << i << ": ";
 				displayer.display("tape" + std::to_string(i), buffer_size);
 			}
 		}
@@ -38,16 +37,13 @@ void Sorter::sort(bool step_by_step, bool verbose, size_t tapes, size_t buffer_s
 		
 		if (verbose || step_by_step)
 		{
-			std::cout << " main file:   ";
+			std::cout << " >  f: ";
 			displayer.display(main_file_path, buffer_size);
 			std::cout << std::endl;
 		}
 		
 		if (step_by_step)
-			system("pause");
-
-		if (verbose || step_by_step)
-			std::cout << std::endl;
+			std::cin.get();
 
 		phase++;
 
@@ -55,22 +51,22 @@ void Sorter::sort(bool step_by_step, bool verbose, size_t tapes, size_t buffer_s
 
 	if (verbose || step_by_step)
 	{
-		std::cout << "File sorted successfully." << std::endl;
+		std::cout << "File sorted successfully. "
+			"Press any key to see the sorted file and sort information." << std::endl;
 		std::cin.get();
-		std::cout << std::endl;
-		std::cout << "AFTER SORT: " << std::endl;
-		std::cout << " main file:   ";
+		std::cout << "====== AFTER SORT" << std::endl;
+		std::cout << " >  f: ";
 		displayer.display(main_file_path, buffer_size);
 		std::cout << std::endl;
 	}
 
 	std::cout << "============ SORT INFORMATION: ============" << std::endl;
-	std::cout << " number of tapes        : " << tapes << std::endl;
-	std::cout << " buffer size            : " << buffer_size << std::endl;
-	std::cout << " phases                 : " << phase << std::endl;
-	std::cout << " total disc operations  : " << disc_read_ops + disc_write_ops << std::endl;
-	std::cout << " disc read operations   : "	<< disc_read_ops << std::endl;
-	std::cout << " disc write operations  : " << disc_write_ops << std::endl;
+	std::cout << " number of tapes                  : " << tapes << std::endl;
+	std::cout << " buffer size                      : " << buffer_size << std::endl;
+	std::cout << " phases                           : " << phase << std::endl;
+	std::cout << " total disc operations            : " << disc_read_ops + disc_write_ops << std::endl;
+	std::cout << " disc read operations             : " << disc_read_ops << std::endl;
+	std::cout << " disc write operations            : " << disc_write_ops << std::endl;
 	std::cout << std::endl;
 }
 
