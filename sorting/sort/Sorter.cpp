@@ -37,6 +37,7 @@ size_t Sorter::sort_verbose(bool step_by_step, size_t tapes, size_t buffer_size)
 		series = merge(tapes, buffer_size);
 
 		display_tape_with_name(displayer, main_file_path, "f", buffer_size);
+		std::cout << std::endl;
 
 		if (step_by_step)
 			std::cin.get();
@@ -91,16 +92,24 @@ void Sorter::distribute(size_t tapes, size_t buffer_size)
 		if (input_reader.eof)
 			break;
 
-		if (r >= prev_r)
-			current_writer->put_next(r);
-		else
+
+		if (r < prev_r)
 		{
 			// change the tape
-			current_writer_idx++;
-			current_writer_idx %= tape_writers.size();
+			current_writer_idx = (current_writer_idx + 1) % tape_writers.size();
 			current_writer = tape_writers.at(current_writer_idx);
-			current_writer->put_next(r);
 		}
+		current_writer->put_next(r);
+
+		//if (r >= prev_r)
+		//	current_writer->put_next(r);
+		//else
+		//{
+		//	// change the tape
+		//	current_writer_idx = (current_writer_idx + 1) % tape_writers.size();
+		//	current_writer = tape_writers.at(current_writer_idx);
+		//	current_writer->put_next(r);
+		//}
 		prev_r = r;
 	}
 
