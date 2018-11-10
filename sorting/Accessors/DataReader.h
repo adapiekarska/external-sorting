@@ -31,6 +31,16 @@ public:
 	bool eos;
 
 	/**
+	* Counter of the records in the file.
+	*/
+	size_t records;
+
+	/**
+	 * Counter of the series in the file.
+	 */
+	size_t series;
+
+	/**
 	* Counter of the disc operations.
 	*/
 	size_t disc_ops;

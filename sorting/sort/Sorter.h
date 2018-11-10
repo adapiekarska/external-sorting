@@ -1,5 +1,5 @@
 #include <fstream>
-#include <iomanip>
+#include <cmath>
 
 #include "../Accessors/DataReader.h"
 #include "../Accessors/DataWriter.h"
@@ -55,19 +55,20 @@ private:
 	ConsoleLogger console_logger;
 
 	/**
-	* Sorts the file verbosely. Returns the number of phases needed to sort the file.
+	* Sorts the file verbosely.
 	*/
-	size_t sort_verbose(bool step_by_step);
+	void sort_verbose(bool step_by_step);
 
 	/**
-	 * Sorts the file non-verbosely. Returns the number of phases needed to sort the file.
+	 * Sorts the file non-verbosely.
 	 */
-	size_t sort_non_verbose();
+	void sort_non_verbose();
 
 	/**
-	 * Distributes series of records from input file accross the tapes.
+	 * Distributes series of records from input file accross the tapes. Returns the pair
+	 * consisting of number of records and series that were read from the file.
 	 */
-	void distribute();
+	std::pair<size_t, size_t> distribute();
 
 	/**
 	 * Merges records from the tapes into output file. Returns the number of series

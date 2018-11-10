@@ -17,7 +17,7 @@ void ConsoleLogger::log_after_phase(size_t i)
 		log_tape_with_name("tape" + std::to_string(i),
 			"t" + std::to_string(i));
 
-	log_tape_with_name(sorter->main_file_path, "f");
+	log_tape_with_name(sorter->main_file_path, "o");
 	std::cout << std::endl;
 }
 
@@ -55,14 +55,16 @@ void ConsoleLogger::log_tape_with_name(std::string const & tape_path,
 	file_displayer.display(tape_path, sorter->buffer_size);
 }
 
-void ConsoleLogger::log_sorting_information(size_t phases) const
+void ConsoleLogger::log_sorting_information(size_t phases, size_t th_phases, size_t th_disc_ops) const
 {
 	std::cout << "============ SORT INFORMATION: ============" << std::endl;
 	std::cout << " number of tapes                  : " << sorter->tapes << std::endl;
 	std::cout << " buffer size                      : " << sorter->buffer_size << std::endl;
 	std::cout << " phases                           : " << phases << std::endl;
-	std::cout << " total disc operations            : " << sorter->disc_ops.read + sorter->disc_ops.write << std::endl;
+	std::cout << " theoretical phases               : " << th_phases << std::endl;
 	std::cout << " disc read operations             : " << sorter->disc_ops.read << std::endl;
 	std::cout << " disc write operations            : " << sorter->disc_ops.write << std::endl;
+	std::cout << " total disc operations            : " << sorter->disc_ops.read + sorter->disc_ops.write << std::endl;
+	std::cout << " theoretical disc operations      : " << th_disc_ops << std::endl;
 	std::cout << std::endl;
 }

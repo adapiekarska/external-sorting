@@ -13,18 +13,22 @@ Sorter::~Sorter() { };
 
 void Sorter::sort(bool step_by_step, bool verbose)
 {
-	size_t phases = verbose ? sort_verbose(step_by_step)
-		: sort_non_verbose();
-	console_logger.log_sorting_information(phases);
+	verbose ? sort_verbose(step_by_step) : sort_non_verbose();
 }
 
-size_t Sorter::sort_verbose(bool step_by_step)
+void Sorter::sort_verbose(bool step_by_step)
 {
 	console_logger.log_initial_state();
 	size_t series, phases = 0;
+	int initial_records = -1, initial_series = -1;
 	do
 	{
-		distribute();
+		std::pair<size_t, size_t> distr_results = distribute();
+		if (phases == 0)
+		{
+			initial_records = distr_results.first;
+			initial_series = distr_results.second;
+		}
 		series = merge();
 
 		phases++;
@@ -35,24 +39,36 @@ size_t Sorter::sort_verbose(bool step_by_step)
 
 	} while (series > 1);
 
+	size_t th_phases = std::ceil(std::log2(initial_series));
+	size_t th_disc_ops = 4 * initial_records * th_phases / buffer_size;
+
 	console_logger.log_final_state();
-	return phases;
+	console_logger.log_sorting_information(phases, th_phases, th_disc_ops);
 }
 
-size_t Sorter::sort_non_verbose()
+void Sorter::sort_non_verbose()
 {
 	size_t series, phases = 0;
+	int initial_records = -1, initial_series = -1;
 	do
 	{
-		distribute();
+		std::pair<size_t, size_t> distr_results = distribute();
+		if (phases == 0)
+		{
+			initial_records = distr_results.first;
+			initial_series = distr_results.second;
+		}
 		series = merge();
 		phases++;
 	} while (series > 1);
+	
+	size_t th_phases = std::ceil(std::log2(initial_series));
+	size_t th_disc_ops = 4 * initial_records * th_phases / buffer_size;
 
-	return phases;
+	console_logger.log_sorting_information(phases, th_phases, th_disc_ops);
 }
 
-void Sorter::distribute()
+std::pair<size_t, size_t> Sorter::distribute()
 {
 	DataReader input_reader(main_file_path, buffer_size);
 	std::vector<DataWriter*> tape_writers;
@@ -86,7 +102,7 @@ void Sorter::distribute()
 		prev_r = r;
 	}
 
-	// update disk operations counter
+	// update disc operations counter
 	for (DataWriter * writer : tape_writers)
 		disc_ops.write += writer->disc_ops;
 
@@ -95,6 +111,8 @@ void Sorter::distribute()
 	// delete tape writers pointers
 	for (std::vector< DataWriter* >::iterator it = tape_writers.begin(); it != tape_writers.end(); ++it)
 		delete (*it);
+
+	return std::make_pair(input_reader.records, input_reader.series);
 }
 
 size_t Sorter::merge()
@@ -148,7 +166,7 @@ size_t Sorter::merge()
 		if (current_reader->eof)
 		{
 			// current reader has reached end of file
-			// update disk operations counter
+			// update disc operations counter
 			disc_ops.read += tape_readers.at(min_tape_idx)->disc_ops;
 
 			// delete the tape reader pointer
@@ -184,7 +202,7 @@ size_t Sorter::merge()
 		}
 	}
 
-	// update disk operations counter
+	// update disc operations counter
 	disc_ops.write += output_writer.disc_ops;
 
 	// return number of series written by the output writer

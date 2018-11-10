@@ -3,7 +3,7 @@
 
 DataReader::DataReader(std::string const & file_path, size_t buffer_size) 
 	: DataAccessor(file_path, buffer_size), ifs(file_path, std::ios::binary | std::istream::in),
-	eof(false), eos(false), disc_ops(0) { }
+	eof(false), eos(false), disc_ops(0), series(0) { }
 
 DataReader::~DataReader() { ifs.close(); }
 
@@ -12,7 +12,7 @@ Int32_Vec DataReader::get_next()
 	if (eos == true)
 		eos = false;
 
-	size_t disk_ops_before_load = disc_ops;
+	size_t disc_ops_before_load = disc_ops;
 
 	if (buffer.empty())
 		if (load_buffer() == 0 )
@@ -25,9 +25,13 @@ Int32_Vec DataReader::get_next()
 	Int32_Vec next = buffer.front();
 	buffer.erase(buffer.begin());
 
-	if (disk_ops_before_load != 0 && next < last_read)
+	if (disc_ops_before_load != 0 && next < last_read)
+	{
 		eos = true;
+		series++;
+	}
 
+	records++;
 	last_read = next;
 	return next;
 }

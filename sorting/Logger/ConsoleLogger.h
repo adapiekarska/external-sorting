@@ -12,8 +12,6 @@ class Sorter;
 class ConsoleLogger
 {
 public:
-
-	//ConsoleLogger(std::string const & input_file_path, size_t tapes, size_t buffer_size);
 	
 	ConsoleLogger(Sorter*);
 
@@ -37,7 +35,7 @@ public:
 	/**
 	* Displays sort information.
 	*/
-	void log_sorting_information(size_t phases) const;
+	void log_sorting_information(size_t phases, size_t th_phases, size_t th_disc_ops) const;
 
 private:
 
