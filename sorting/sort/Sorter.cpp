@@ -13,7 +13,7 @@ void Sorter::sort(bool step_by_step, bool verbose, size_t tapes, size_t buffer_s
 		std::cout << "BEFORE SORT:" << std::endl;
 		std::cout << " main file:   ";
 		displayer.display(main_file_path, buffer_size);
-		system("pause");
+		std::cin.get();
 		std::cout << std::endl;
 	}
 
@@ -56,7 +56,7 @@ void Sorter::sort(bool step_by_step, bool verbose, size_t tapes, size_t buffer_s
 	if (verbose || step_by_step)
 	{
 		std::cout << "File sorted successfully." << std::endl;
-		system("pause");
+		std::cin.get();
 		std::cout << std::endl;
 		std::cout << "AFTER SORT: " << std::endl;
 		std::cout << " main file:   ";
