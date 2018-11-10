@@ -1,5 +1,5 @@
 #include "ConsoleLogger.h"
-#include "Sort/Sorter.h"
+#include "../Sort/Sorter.h"
 
 
 ConsoleLogger::ConsoleLogger(Sorter* sorter) : sorter(sorter), name_display_width(5)
@@ -30,13 +30,13 @@ void ConsoleLogger::log_initial_state()
 
 void ConsoleLogger::log_final_state()
 {
-	std::cout << std::endl << "File sorted successfully." << std::endl
+	std::cout << "File sorted successfully." << std::endl
 		<< "Press any key to see the sorted file and sort information." << std::endl;
 
 	std::cin.get();
-	std::cout << std::endl;
 	std::cout << "====== AFTER SORT" << std::endl;
 	log_tape_with_name(sorter->main_file_path, "f");
+	std::cout << std::endl;
 }
 
 void ConsoleLogger::log_tape_with_name(std::string const & tape_path,

@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "FileDisplayer.h"
+#include "../FileDisplayer.h"
 
 class Sorter;
 

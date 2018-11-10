@@ -4,7 +4,7 @@
 #include "../Accessors/DataReader.h"
 #include "../Accessors/DataWriter.h"
 #include "../FileDisplayer.h"
-#include "../ConsoleLogger.h"
+#include "../Logger/ConsoleLogger.h"
 
 /**
  * Class implementing sorting logic.
