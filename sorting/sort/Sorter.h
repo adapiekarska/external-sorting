@@ -70,7 +70,7 @@ private:
 	 * Uses the FileDisplayer to display the tape's contents.
 	 */
 	void display_tape_with_name(FileDisplayer & fd, std::string const & tape_path,
-		std::string const & tape_name, size_t buffer_size) const;
+		std::string const & tape_name, size_t buffer_size, size_t width) const;
 
 	/**
 	 * Displays sort information.

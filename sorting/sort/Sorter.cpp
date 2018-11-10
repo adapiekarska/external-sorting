@@ -18,9 +18,11 @@ void Sorter::sort(bool step_by_step, bool verbose, size_t tapes, size_t buffer_s
 size_t Sorter::sort_verbose(bool step_by_step, size_t tapes, size_t buffer_size)
 {
 	FileDisplayer displayer;
+	size_t name_display_width = 5;
 
 	std::cout << "====== BEFORE SORT" << std::endl;
-	display_tape_with_name(displayer, main_file_path, "f", buffer_size);
+	display_tape_with_name(displayer, main_file_path, "f", buffer_size,
+		name_display_width);
 	std::cin.get();
 
 	size_t series, phases = 0;
@@ -32,11 +34,12 @@ size_t Sorter::sort_verbose(bool step_by_step, size_t tapes, size_t buffer_size)
 
 		for (size_t i = 0; i < tapes; i++)
 			display_tape_with_name(displayer, "tape" + std::to_string(i),
-				"t" + std::to_string(i), buffer_size);
+				"t" + std::to_string(i), buffer_size, name_display_width);
 
 		series = merge(tapes, buffer_size);
 
-		display_tape_with_name(displayer, main_file_path, "f", buffer_size);
+		display_tape_with_name(displayer, main_file_path, "f", buffer_size,
+			name_display_width);
 		std::cout << std::endl;
 
 		if (step_by_step)
@@ -50,7 +53,9 @@ size_t Sorter::sort_verbose(bool step_by_step, size_t tapes, size_t buffer_size)
 		<< "Press any key to see the sorted file and sort information." << std::endl;
 	std::cin.get();
 	std::cout << "====== AFTER SORT" << std::endl;
-	display_tape_with_name(displayer, main_file_path, "f", buffer_size);
+	display_tape_with_name(displayer, main_file_path, "f", buffer_size,
+		name_display_width);
+	std::cout << std::endl;
 
 	return phases;
 }
@@ -100,16 +105,6 @@ void Sorter::distribute(size_t tapes, size_t buffer_size)
 			current_writer = tape_writers.at(current_writer_idx);
 		}
 		current_writer->put_next(r);
-
-		//if (r >= prev_r)
-		//	current_writer->put_next(r);
-		//else
-		//{
-		//	// change the tape
-		//	current_writer_idx = (current_writer_idx + 1) % tape_writers.size();
-		//	current_writer = tape_writers.at(current_writer_idx);
-		//	current_writer->put_next(r);
-		//}
 		prev_r = r;
 	}
 
@@ -241,9 +236,18 @@ size_t Sorter::min_tape_index(std::vector<Int32_Vec> const & fronts, std::vector
 }
 
 void Sorter::display_tape_with_name(FileDisplayer & fd, std::string const & tape_path,
-	std::string const & tape_name, size_t buffer_size) const
+	std::string const & tape_name, size_t buffer_size, size_t width) const
 {
-	std::cout << " >  " << tape_name << ": ";
+	size_t name_len = tape_name.length();
+
+	if (width < name_len)
+		width = name_len;
+
+	std::cout << " >";
+	for (size_t i = 0; i < width - name_len - 2; i++)
+		std::cout << " ";
+	std::cout << tape_name << ": ";
+
 	fd.display(tape_path, buffer_size);
 }
 
