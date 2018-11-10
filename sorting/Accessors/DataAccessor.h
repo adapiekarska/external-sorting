@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-#include "../Int32_Vec.h"
+#include "../Record/Int32_Vec.h"
 
 /**
  * Base class for DataWriter and DataReader.

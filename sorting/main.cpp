@@ -1,11 +1,11 @@
 #include <iostream>
 #include <algorithm>
 
-#include "Generators/DataGenerator.h"
-#include "Generators/FileGenerator.h"
+#include "DataUtilities/DataGenerator.h"
+#include "FileUtilities/FileGenerator.h"
 #include "Accessors/DataReader.h"
 #include "Accessors/DataWriter.h"
-#include "Int32_Vec.h"
+#include "Record/Int32_Vec.h"
 #include "Sort/Sorter.h"
 #include "ConfigParser.h"
 

@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "DataAccessor.h"
-#include "../Int32_Vec.h"
+#include "../Record/Int32_Vec.h"
 #include "../globals.h"
 
 /**

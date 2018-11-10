@@ -18,12 +18,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Int32_Vec.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FileDisplayer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sort\Sorter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -36,27 +30,27 @@
     <ClCompile Include="Accessors\DataWriter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Generators\DataGenerator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Generators\FileGenerator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ConfigParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Logger\ConsoleLogger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Record\Int32_Vec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DataUtilities\DataGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileUtilities\FileDisplayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileUtilities\FileGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Int32_Vec.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FileDisplayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sort\Sorter.h">
@@ -71,16 +65,22 @@
     <ClInclude Include="Accessors\DataWriter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Generators\DataGenerator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Generators\FileGenerator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ConfigParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Logger\ConsoleLogger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Record\Int32_Vec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DataUtilities\DataGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileUtilities\FileDisplayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileUtilities\FileGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
