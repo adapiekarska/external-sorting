@@ -115,6 +115,7 @@
     <ClCompile Include="Accessors\DataReader.cpp" />
     <ClCompile Include="Accessors\DataWriter.cpp" />
     <ClCompile Include="ConfigParser.cpp" />
+    <ClCompile Include="ConsoleLogger.cpp" />
     <ClCompile Include="FileDisplayer.cpp" />
     <ClCompile Include="Generators\DataGenerator.cpp" />
     <ClCompile Include="Generators\FileGenerator.cpp" />
@@ -127,6 +128,7 @@
     <ClInclude Include="Accessors\DataReader.h" />
     <ClInclude Include="Accessors\DataWriter.h" />
     <ClInclude Include="ConfigParser.h" />
+    <ClInclude Include="ConsoleLogger.h" />
     <ClInclude Include="FileDisplayer.h" />
     <ClInclude Include="Generators\DataGenerator.h" />
     <ClInclude Include="Generators\FileGenerator.h" />

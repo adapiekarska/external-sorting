@@ -62,12 +62,10 @@ int main(int argc, char** argv)
 		break;
 	}
 
-	Sorter sorter(input_file_name);
+	Sorter sorter(input_file_name, config_parser.tapes, config_parser.buffer_size / (sizeof(int) * VEC_DIM));
 	sorter.sort(
 		config_parser.step_by_step,
-		config_parser.verbose,
-		config_parser.tapes,
-		config_parser.buffer_size / (sizeof(int) * VEC_DIM)
+		config_parser.verbose
 	);
 	std::cin.get();
 	return 0;

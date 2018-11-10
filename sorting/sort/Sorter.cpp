@@ -1,46 +1,32 @@
 #include "Sorter.h"
 
 
-Sorter::Sorter(std::string const & main_file_path) 
-	: main_file_path(main_file_path)
+Sorter::Sorter(std::string const & main_file_path, size_t tapes, size_t buffer_size) 
+	: main_file_path(main_file_path), tapes(tapes), buffer_size(buffer_size), console_logger(this)
 {
 	disc_ops.read = 0;
 	disc_ops.write = 0;
 }
 
-void Sorter::sort(bool step_by_step, bool verbose, size_t tapes, size_t buffer_size)
+Sorter::~Sorter() { };
+
+
+void Sorter::sort(bool step_by_step, bool verbose)
 {
-	size_t phases = verbose ? sort_verbose(step_by_step, tapes, buffer_size)
-		: sort_non_verbose(tapes, buffer_size);
-	display_sort_information(tapes, buffer_size, phases, disc_ops.read, disc_ops.write);
+	size_t phases = verbose ? sort_verbose(step_by_step)
+		: sort_non_verbose();
+	console_logger.log_sorting_information(phases);
 }
 
-size_t Sorter::sort_verbose(bool step_by_step, size_t tapes, size_t buffer_size)
+size_t Sorter::sort_verbose(bool step_by_step)
 {
-	FileDisplayer displayer;
-	size_t name_display_width = 5;
-
-	std::cout << "====== BEFORE SORT" << std::endl;
-	display_tape_with_name(displayer, main_file_path, "f", buffer_size,
-		name_display_width);
-	std::cin.get();
-
+	console_logger.log_initial_state();
 	size_t series, phases = 0;
 	do
 	{
-		std::cout << "====== PHASE " << phases << std::endl;
-
-		distribute(tapes, buffer_size);
-
-		for (size_t i = 0; i < tapes; i++)
-			display_tape_with_name(displayer, "tape" + std::to_string(i),
-				"t" + std::to_string(i), buffer_size, name_display_width);
-
-		series = merge(tapes, buffer_size);
-
-		display_tape_with_name(displayer, main_file_path, "f", buffer_size,
-			name_display_width);
-		std::cout << std::endl;
+		distribute();
+		series = merge();
+		console_logger.log_after_phase(phases);
 
 		if (step_by_step)
 			std::cin.get();
@@ -49,31 +35,24 @@ size_t Sorter::sort_verbose(bool step_by_step, size_t tapes, size_t buffer_size)
 
 	} while (series > 1);
 
-	std::cout << std::endl << "File sorted successfully." << std::endl
-		<< "Press any key to see the sorted file and sort information." << std::endl;
-	std::cin.get();
-	std::cout << "====== AFTER SORT" << std::endl;
-	display_tape_with_name(displayer, main_file_path, "f", buffer_size,
-		name_display_width);
-	std::cout << std::endl;
-
+	console_logger.log_final_state();
 	return phases;
 }
 
-size_t Sorter::sort_non_verbose(size_t tapes, size_t buffer_size)
+size_t Sorter::sort_non_verbose()
 {
 	size_t series, phases = 0;
 	do
 	{
-		distribute(tapes, buffer_size);
-		series = merge(tapes, buffer_size);
+		distribute();
+		series = merge();
 		phases++;
 	} while (series > 1);
 
 	return phases;
 }
 
-void Sorter::distribute(size_t tapes, size_t buffer_size)
+void Sorter::distribute()
 {
 	DataReader input_reader(main_file_path, buffer_size);
 	std::vector<DataWriter*> tape_writers;
@@ -97,7 +76,6 @@ void Sorter::distribute(size_t tapes, size_t buffer_size)
 		if (input_reader.eof)
 			break;
 
-
 		if (r < prev_r)
 		{
 			// change the tape
@@ -119,8 +97,7 @@ void Sorter::distribute(size_t tapes, size_t buffer_size)
 		delete (*it);
 }
 
-
-size_t Sorter::merge(size_t tapes, size_t buffer_size)
+size_t Sorter::merge()
 {
 	std::vector<DataReader*> tape_readers;
 	for (size_t i = 0; i < tapes; i++)
@@ -233,33 +210,4 @@ size_t Sorter::min_tape_index(std::vector<Int32_Vec> const & fronts, std::vector
 	}
 
 	return min;
-}
-
-void Sorter::display_tape_with_name(FileDisplayer & fd, std::string const & tape_path,
-	std::string const & tape_name, size_t buffer_size, size_t width) const
-{
-	size_t name_len = tape_name.length();
-
-	if (width < name_len)
-		width = name_len;
-
-	std::cout << " >";
-	for (size_t i = 0; i < width - name_len - 2; i++)
-		std::cout << " ";
-	std::cout << tape_name << ": ";
-
-	fd.display(tape_path, buffer_size);
-}
-
-void Sorter::display_sort_information(size_t tapes, size_t buffer_size, size_t phases,
-	size_t disc_read_ops, size_t disc_write_ops) const
-{
-	std::cout << "============ SORT INFORMATION: ============" << std::endl;
-	std::cout << " number of tapes                  : " << tapes << std::endl;
-	std::cout << " buffer size                      : " << buffer_size << std::endl;
-	std::cout << " phases                           : " << phases << std::endl;
-	std::cout << " total disc operations            : " << disc_read_ops + disc_write_ops << std::endl;
-	std::cout << " disc read operations             : " << disc_read_ops << std::endl;
-	std::cout << " disc write operations            : " << disc_write_ops << std::endl;
-	std::cout << std::endl;
 }
