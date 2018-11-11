@@ -36,7 +36,12 @@ public:
 	/**
 	 * Number of records that were initially in the input file.
 	 */
-	size_t records;
+	size_t initial_records;
+
+	/**
+	 * Number of series that were initially in the input file.
+	 */
+	size_t initial_series;
 
 	/**
 	 * Number of tapes used in distribution phase.

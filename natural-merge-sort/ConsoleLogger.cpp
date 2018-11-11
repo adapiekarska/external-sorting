@@ -51,21 +51,21 @@ void ConsoleLogger::log_tape_with_name(std::string const & tape_path,
 	for (size_t i = 0; i < name_display_width - name_len - 2; i++)
 		std::cout << " ";
 	std::cout << tape_name << ": ";
-
 	file_displayer.display(tape_path, sorter->buffer_size);
 }
 
 void ConsoleLogger::log_sorting_information(size_t phases, size_t th_phases, size_t th_disc_ops) const
 {
 	std::cout << "============ SORT INFORMATION: ============" << std::endl;
-	std::cout << " number of records                : " << sorter->records << std::endl;
-	std::cout << " number of tapes                  : " << sorter->tapes << std::endl;
-	std::cout << " buffer size                      : " << sorter->buffer_size << std::endl;
-	std::cout << " phases                           : " << phases << std::endl;
-	std::cout << " theoretical phases               : " << th_phases << std::endl;
-	std::cout << " disc read operations             : " << sorter->disc_ops.read << std::endl;
-	std::cout << " disc write operations            : " << sorter->disc_ops.write << std::endl;
-	std::cout << " total disc operations            : " << sorter->disc_ops.read + sorter->disc_ops.write << std::endl;
-	std::cout << " theoretical disc operations      : " << th_disc_ops << std::endl;
+	std::cout << " initial number of records            : " << sorter->initial_records << std::endl;
+	std::cout << " initial number of series             : " << sorter->initial_series << std::endl;
+	std::cout << " number of tapes                      : " << sorter->tapes << std::endl;
+	std::cout << " buffer size (in records)             : " << sorter->buffer_size << std::endl;
+	std::cout << " phases                               : " << phases << std::endl;
+	std::cout << " theoretical phases                   : " << th_phases << std::endl;
+	std::cout << " disc read operations                 : " << sorter->disc_ops.read << std::endl;
+	std::cout << " disc write operations                : " << sorter->disc_ops.write << std::endl;
+	std::cout << " total disc operations                : " << sorter->disc_ops.read + sorter->disc_ops.write << std::endl;
+	std::cout << " theoretical disc operations          : " << th_disc_ops << std::endl;
 	std::cout << std::endl;
 }

@@ -15,7 +15,7 @@ The project's goal is to demonstrate the external sorting alghorithms. The progr
 ### Command line options
 | Short option | Long option      | Argument                                    | Description                                                                                                 |
 |:------------:|:-----------------|:-------------------------------------------:|-------------------------------------------------------------------------------------------------------------|
-| `-r`         | `--random`       | `[RECORDS_NUM]` `[MIN_RANGE]` `[MAX_RANGE]` | Randomly generates input file containing RECORD_NUM records. Default is 1000.                               |
+| `-r`         | `--random`       | `[RECORDS_NUM]` `[MIN_RANGE]` `[MAX_RANGE]` | Randomly generates input file containing RECORD_NUM records from MIN_RANGE to MAX_RANGE. Default is 1000.   |
 | `-f`         | `--file`         | `[FILE_PATH]`                               | By supplying this option, the user is allowed to specify a path to the binary input file.                   |
 | `-u`         | `--user`         |                                             | Guides user through the process of typing the records with the keyboard.                                    |
 | `-s`         | `--step-by-step` |                                             | Lets user go through sorting step by step. This option also sets maximum verbosity.                         |

@@ -8,6 +8,8 @@ void ConfigParser::parse_arguments(int argc, char** argv)
 	buffer_size = 40;
 	tapes = 2;
 	records = 1000;
+	min_range = 0;
+	max_range = 1000;
 	i_mode = NONE;
 	input_file_path = "";
 

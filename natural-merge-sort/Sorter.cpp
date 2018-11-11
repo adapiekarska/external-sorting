@@ -6,7 +6,8 @@ Sorter::Sorter(std::string const & main_file_path, size_t tapes, size_t buffer_s
 {
 	disc_ops.read = 0;
 	disc_ops.write = 0;
-	records = -1;
+	initial_records = -1;
+	initial_series = -1;
 }
 
 Sorter::~Sorter() { };
@@ -21,13 +22,12 @@ void Sorter::sort_verbose(bool step_by_step)
 {
 	console_logger.log_initial_state();
 	size_t series, phases = 0;
-	int initial_series = -1;
 	do
 	{
 		std::pair<size_t, size_t> distr_results = distribute();
 		if (phases == 0)
 		{
-			records = distr_results.first;
+			initial_records = distr_results.first;
 			initial_series = distr_results.second;
 		}
 		series = merge();
@@ -41,7 +41,7 @@ void Sorter::sort_verbose(bool step_by_step)
 	} while (series > 1);
 
 	size_t th_phases = std::ceil(std::log2(initial_series));
-	size_t th_disc_ops = 4 * records * th_phases / buffer_size;
+	size_t th_disc_ops = 4 * initial_records * th_phases / buffer_size;
 
 	console_logger.log_final_state();
 	console_logger.log_sorting_information(phases, th_phases, th_disc_ops);
@@ -50,13 +50,12 @@ void Sorter::sort_verbose(bool step_by_step)
 void Sorter::sort_non_verbose()
 {
 	size_t series, phases = 0;
-	int initial_series = -1;
 	do
 	{
 		std::pair<size_t, size_t> distr_results = distribute();
 		if (phases == 0)
 		{
-			records = distr_results.first;
+			initial_records = distr_results.first;
 			initial_series = distr_results.second;
 		}
 		series = merge();
@@ -64,7 +63,7 @@ void Sorter::sort_non_verbose()
 	} while (series > 1);
 	
 	size_t th_phases = std::ceil(std::log2(initial_series));
-	size_t th_disc_ops = 4 * records * th_phases / buffer_size;
+	size_t th_disc_ops = 4 * initial_records * th_phases / buffer_size;
 
 	console_logger.log_sorting_information(phases, th_phases, th_disc_ops);
 }
