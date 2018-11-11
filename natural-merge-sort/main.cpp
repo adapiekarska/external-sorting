@@ -53,11 +53,11 @@ int main(int argc, char** argv)
 
 	Sorter sorter(input_file_name, config_parser.tapes, config_parser.buffer_size / (sizeof(int) * VEC_DIM));
 	std::cout << "Starting sort..." << std::endl;
+	std::cout << std::endl;
 	sorter.sort(
 		config_parser.step_by_step,
 		config_parser.verbose
 	);
-	std::cout << "Program finished." << std::endl;
-	std::cin.get();
+	std::cout << "Program finished." << std::endl << std::endl;
 	return 0;
 }

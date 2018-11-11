@@ -29,9 +29,14 @@ public:
 	DiscOps disc_ops;
 
 	/**
-	* Path to the file that is to be sorted.
-	*/
+	 * Path to the file that is to be sorted.
+	 */
 	std::string main_file_path;
+
+	/**
+	 * Number of records that were initially in the input file.
+	 */
+	size_t records;
 
 	/**
 	 * Number of tapes used in distribution phase.
