@@ -39,15 +39,14 @@ Note that the specified input file is overwritten entirely during the sort proce
 The assumption is made that the single record is the 2D vector. Therefore each record in the binary file should be a pair of 4-byte long integers. This implies that the **byte length of the file should be divisible by 8**, since each record should be exactly 8-byte long.
 
 ### Sample input files
-Sample input files can be found in [input subdirectory](sorting/input) of the project.
+Sample input files can be found in [input subdirectory](natural-merge-sort/input) of the project.
 The contents of the file are described by the file name. Each file name consists of three parts separated by an underscore. First part of the name is the number of the records included in the file, and the remaining two mean the lower and upper boundary of the records. The `n` prefix before any of the two latter means negative value. Note that smaller files with small range of values are better for illustrating the algorithm's operation, while bigger files may be useful for performance testing.
 
 ## Sorting
 
-### Sorting methods
+### Sorting method
 
-* Natural merge sort
-* Polyphase merge sort - *to be implemented in the future*
+The method is called **natural merge sort**.
 
 ### Sorting criteria
 As for now the sorting criteria is fixed to be the euclidian norm of the vector.
