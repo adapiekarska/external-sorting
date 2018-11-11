@@ -28,18 +28,18 @@ int main(int argc, char** argv)
 	std::vector<Int32_Vec> data;
 	std::string input_file_name = "data";
 
-	switch (config_parser.input_mode)
+	switch (config_parser.get_i_mode())
 	{
 		case config_parser.input_mode::IN_RANDOM:
 		{
-			data = data_generator.random_generate(config_parser.records, MIN_RANGE, MAX_RANGE);
+			data = data_generator.random_generate(config_parser.get_records(), config_parser.get_min_range(), config_parser.get_max_range());
 			FileGenerator file_generator;
 			file_generator.generate(data, input_file_name);
 		}
 		break;
 		case config_parser.input_mode::IN_FILE:
 		{
-			input_file_name = config_parser.input_file_path;
+			input_file_name = config_parser.get_input_file_path();
 		}
 		break;
 		case config_parser.input_mode::IN_USER:
@@ -51,13 +51,13 @@ int main(int argc, char** argv)
 		break;
 	}
 
-	Sorter sorter(input_file_name, config_parser.tapes, config_parser.buffer_size / (sizeof(int) * VEC_DIM));
+	Sorter sorter(input_file_name, config_parser.get_tapes(), config_parser.get_buffer_size() / (sizeof(int) * VEC_DIM));
 	std::cout << "Starting sort..." << std::endl;
 	std::cout << std::endl;
 	sorter.sort(
-		config_parser.step_by_step,
-		config_parser.verbose
+		config_parser.get_step_by_step(),
+		config_parser.get_verbose()
 	);
-	std::cout << "Program finished." << std::endl << std::endl;
+	std::cout << "Program finished." << std::endl;
 	return 0;
 }

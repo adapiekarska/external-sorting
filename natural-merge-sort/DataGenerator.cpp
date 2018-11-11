@@ -20,6 +20,7 @@ std::vector<Int32_Vec> DataGenerator::user_generate() const
 	std::vector<Int32_Vec> data;
 
 	std::cout << "Please provide space-separated pairs of integers." << std::endl;
+	std::cout << "Press enter if you want to stop supplying records." << std::endl;
 
 	std::string line;
 

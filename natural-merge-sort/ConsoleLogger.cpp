@@ -24,7 +24,7 @@ void ConsoleLogger::log_after_phase(size_t i)
 void ConsoleLogger::log_initial_state()
 {
 	std::cout << "====== BEFORE SORT" << std::endl;
-	log_tape_with_name(sorter->main_file_path, "f");
+	log_tape_with_name(sorter->main_file_path, "o");
 	std::cin.get();
 }
 
@@ -35,7 +35,7 @@ void ConsoleLogger::log_final_state()
 
 	std::cin.get();
 	std::cout << "====== AFTER SORT" << std::endl;
-	log_tape_with_name(sorter->main_file_path, "f");
+	log_tape_with_name(sorter->main_file_path, "o");
 	std::cout << std::endl;
 }
 

@@ -8,7 +8,7 @@ void ConfigParser::parse_arguments(int argc, char** argv)
 	buffer_size = 40;
 	tapes = 2;
 	records = 1000;
-	input_mode = NONE;
+	i_mode = NONE;
 	input_file_path = "";
 
 	std::vector<std::string> opts;
@@ -29,7 +29,7 @@ void ConfigParser::parse_arguments(int argc, char** argv)
 		}
 		else if (opt == "-b" || opt == "--buffer")
 		{
-			if (i != opts.size() - 1)
+			if (i < opts.size() - 1)
 			{
 				// omit the buffer size in argument parsing
 				if (!opts[i + 1].empty() &&
@@ -53,7 +53,7 @@ void ConfigParser::parse_arguments(int argc, char** argv)
 		}
 		else if (opt == "-t" || opt == "--tapes")
 		{
-			if (i != opts.size() - 1)
+			if (i < opts.size() - 1)
 			{
 				// omit the number of tapes in argument parsing
 				if (std::all_of(opts[i + 1].begin(), opts[i + 1].end(), ::isdigit))
@@ -69,37 +69,45 @@ void ConfigParser::parse_arguments(int argc, char** argv)
 		}
 		else if (opt == "-r" || opt == "--random")
 		{
-			if (i != opts.size() - 1)
+			if (static_cast<int>(i) < static_cast<int>(opts.size()) - 3)
 			{
-				if (input_mode == input_mode::IN_USER ||
-					input_mode == input_mode::IN_FILE)
+				if (i_mode == input_mode::IN_USER ||
+					i_mode == input_mode::IN_FILE)
 				{
 					std::stringstream ss;
 					ss << "Invalid option " << opt << " if config mode "
-						<< input_mode << " specified before.";
+						<< i_mode << " specified before.";
 					throw std::runtime_error(ss.str());
 				}
 				else
 				{
-					if (std::all_of(opts[i + 1].begin(), opts[i + 1].end(), ::isdigit))
+					if (std::all_of(opts[i + 1].begin(), opts[i + 1].end(), ::isdigit) &&
+						std::all_of(opts[i + 2].begin(), opts[i + 2].end(), ::isdigit) &&
+						std::all_of(opts[i + 3].begin(), opts[i + 3].end(), ::isdigit))
 					{
-						input_mode = input_mode::IN_RANDOM;
+						i_mode = input_mode::IN_RANDOM;
 						records = static_cast<size_t>(std::stoi(opts[i + 1]));
-						i++;
+						min_range = std::stoi(opts[i + 2]);
+						max_range = std::stoi(opts[i + 3]);
+						i+=3;
 					}
+					else
+						throw std::runtime_error("Invaild arguments of " + opt[i]);
 				}
 			}
+			else
+				throw std::runtime_error("Invalid arguments of " + opt[i]);
 		}
 		else if (opt == "-f" || opt == "--file")
 		{
-			if (i != opts.size() - 1)
+			if (i < opts.size() - 1)
 			{
-				if (input_mode == input_mode::IN_USER ||
-					input_mode == input_mode::IN_RANDOM)
+				if (i_mode == input_mode::IN_USER ||
+					i_mode == input_mode::IN_RANDOM)
 				{
 					std::stringstream ss;
 					ss << "Invalid option " << opt << " if config mode "
-						<< input_mode << " specified before.";
+						<< i_mode << " specified before.";
 					throw std::runtime_error(ss.str());
 				}
 				else
@@ -107,7 +115,7 @@ void ConfigParser::parse_arguments(int argc, char** argv)
 					// omit the file path in argument parsing
 					if (opts[i + 1][0] != '-')
 					{
-						input_mode = input_mode::IN_FILE;
+						i_mode = input_mode::IN_FILE;
 						input_file_path = opts[i + 1];
 						std::ifstream infile(input_file_path);
 						if (!infile.good())
@@ -123,17 +131,17 @@ void ConfigParser::parse_arguments(int argc, char** argv)
 		}
 		else if (opt == "-u" || opt == "--user")
 		{
-			if (input_mode == input_mode::IN_FILE ||
-				input_mode == input_mode::IN_RANDOM)
+			if (i_mode == input_mode::IN_FILE ||
+				i_mode == input_mode::IN_RANDOM)
 			{
 				std::stringstream ss;
 				ss << "Invalid option " << opt << " if config mode "
-					<< input_mode << " specified before.";
+					<< i_mode << " specified before.";
 				throw std::runtime_error(ss.str());
 			}
 			else
 			{
-				input_mode = IN_USER;
+				i_mode = IN_USER;
 			}
 		}
 		else if (opt == "-h" || opt == "--help")
@@ -141,11 +149,11 @@ void ConfigParser::parse_arguments(int argc, char** argv)
 			std::cout <<
 				"Options:\n"
 				"\n"
-				"	-r [RECORDS_NUM], --random [RECORDS_NUM]\n"
-				"		Randomly generates input file containing RECORDS_NUM records. Default is\n"
-				"		1000.\n"
+				"	-r, --random [RECORDS_NUM] [MIN_RANGE] [MAX_RANGE]\n"
+				"		Randomly generates input file containing RECORDS_NUM records from MIN_RANGE\n"
+				"		to MAX_RANGE. Default is 1000.\n"
 				"\n"
-				"	-f [FILE_PATH], --file [FILE_PATH]\n"
+				"	-f, --file [FILE_PATH]\n"
 				"		By supplying this option, the user is allowed to specify a path to the\n"
 				"		binary input file.\n"
 				"\n"
@@ -179,6 +187,63 @@ void ConfigParser::parse_arguments(int argc, char** argv)
 		i++;
 	}
 
-	if (input_mode == input_mode::NONE)
-		input_mode = input_mode::IN_RANDOM;
+	if (i_mode == input_mode::NONE)
+		i_mode = input_mode::IN_RANDOM;
+}
+
+bool ConfigParser::get_step_by_step()
+{
+	return step_by_step;
+}
+
+bool ConfigParser::get_verbose()
+{
+	return verbose;
+}
+
+size_t ConfigParser::get_buffer_size()
+{
+	return buffer_size;
+}
+
+size_t ConfigParser::get_tapes()
+{
+	return tapes;
+}
+
+ConfigParser::input_mode ConfigParser::get_i_mode()
+{
+	return i_mode;
+}
+
+size_t ConfigParser::get_records()
+{
+	if (i_mode != ConfigParser::input_mode::IN_RANDOM)
+		throw std::runtime_error("Illegal access error.");
+
+	return records;
+}
+
+int ConfigParser::get_min_range()
+{
+	if (i_mode != ConfigParser::input_mode::IN_RANDOM)
+		throw std::runtime_error("Illegal access error.");
+
+	return min_range;
+}
+
+int ConfigParser::get_max_range()
+{
+	if (i_mode != ConfigParser::input_mode::IN_RANDOM)
+		throw std::runtime_error("Illegal access error.");
+
+	return max_range;
+}
+
+std::string ConfigParser::get_input_file_path()
+{
+	if (i_mode != ConfigParser::input_mode::IN_FILE)
+		throw std::runtime_error("Illegal access error.");
+
+	return input_file_path;
 }
