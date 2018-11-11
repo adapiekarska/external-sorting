@@ -109,6 +109,9 @@ void ConfigParser::parse_arguments(int argc, char** argv)
 					{
 						input_mode = input_mode::IN_FILE;
 						input_file_path = opts[i + 1];
+						std::ifstream infile(input_file_path);
+						if (!infile.good())
+							throw std::runtime_error("File does not exist.");
 						i++;
 					}
 					else

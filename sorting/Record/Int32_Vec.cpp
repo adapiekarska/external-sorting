@@ -10,26 +10,22 @@ Int32_Vec::~Int32_Vec() { }
 
 bool operator>(const Int32_Vec & v1, const Int32_Vec & v2)
 {
-	//return v1.length > v2.length;
-	return v1.first > v2.first;
+	return v1.length > v2.length;
 }
 
 bool operator>=(const Int32_Vec & v1, const Int32_Vec & v2)
 {
-	// return v1.length >= v2.length;
-	return v1.first >= v2.first;
+	return v1.length >= v2.length;
 }
 
 bool operator<(const Int32_Vec & v1, const Int32_Vec & v2)
 {
-	//return v1.length < v2.length;
-	return v1.first < v2.first;
+	return v1.length < v2.length;
 }
 
 bool operator<=(const Int32_Vec & v1, const Int32_Vec & v2)
 {
-	// return v1.length <= v2.length;
-	return v1.first <= v2.first;
+	return v1.length <= v2.length;
 }
 
 std::ostream & operator<<(std::ostream & output, const Int32_Vec & vec)

@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <sstream>
 #include <iostream>
+#include <fstream>
 
 #include "globals.h"
 
