@@ -37,10 +37,11 @@ void ConfigParser::parse_arguments(int argc, char** argv)
 				if (!opts[i + 1].empty() &&
 					std::all_of(opts[i + 1].begin(), opts[i + 1].end(), ::isdigit))
 				{
-					size_t buffer_size = static_cast<size_t>(std::stoi(opts[i + 1]));
-					if (buffer_size % (sizeof(int) * VEC_DIM) == 0)
+					int x = std::stoi(opts[i + 1]);
+					size_t buff_size = static_cast<size_t>(x);
+					if (buff_size % (sizeof(int) * VEC_DIM) == 0)
 					{
-						buffer_size = buffer_size;
+						buffer_size = buff_size;
 						i++;
 					}
 					else
