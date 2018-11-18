@@ -15,13 +15,13 @@ The project's goal is to demonstrate the external sorting alghorithms. The progr
 ### Command line options
 | Short option | Long option      | Argument                                    | Description                                                                                                 |
 |:------------:|:-----------------|:-------------------------------------------:|-------------------------------------------------------------------------------------------------------------|
-| `-r`         | `--random`       | `[RECORDS_NUM]` `[MIN_RANGE]` `[MAX_RANGE]` | Randomly generates input file containing RECORD_NUM records from MIN_RANGE to MAX_RANGE. Default is 1000.   |
-| `-f`         | `--file`         | `[FILE_PATH]`                               | By supplying this option, the user is allowed to specify a path to the binary input file.                   |
+| `-r`         | `--random`       | `RECORDS_NUM` `MIN_RANGE` `MAX_RANGE`       | Randomly generates input file containing RECORD_NUM records from MIN_RANGE to MAX_RANGE. Default is 1000.   |
+| `-f`         | `--file`         | `FILE_PATH`                                 | By supplying this option, the user is allowed to specify a path to the binary input file.                   |
 | `-u`         | `--user`         |                                             | Guides user through the process of typing the records with the keyboard.                                    |
 | `-s`         | `--step-by-step` |                                             | Lets user go through sorting step by step. This option also sets maximum verbosity.                         |
 | `-v`         | `--verbose`      |                                             | Sets maximum verbosity level. This means displaying each tape during the sorting process.                   |
-| `-t`         | `--tapes`        | `[TAPES_NUM]`                               | Sets the number of tapes used in distribution phase. Default is 2.                                          |
-| `-b`         | `--buffer`       | `[BUFF_SIZE]`                               | Sets the buffer size in bytes. The buffer size must be divisible by the record byte length. Default is 40B. |
+| `-t`         | `--tapes`        | `TAPES_NUM`                                 | Sets the number of tapes used in distribution phase. Default is 2.                                          |
+| `-b`         | `--buffer`       | `BUFF_SIZE`                                 | Sets the buffer size in bytes. The buffer size must be divisible by the record byte length. Default is 40B. |
 | `-h`         | `--help`         |                                             | Outputs help message.                                                                                       |
 
 If none of the flags `-r`, `-f` and `-u` is specified, the input is generated randomly just as if `-r` flag was provided.
