@@ -40,7 +40,7 @@ void Sorter::sort_verbose(bool step_by_step)
 
 	} while (series > 1);
 
-	size_t th_phases = std::ceil(std::log2(initial_series));
+	size_t th_phases = std::ceil(std::log2(initial_series)/std::log2(tapes));
 	size_t th_disc_ops = 4 * initial_records * th_phases / buffer_size;
 
 	console_logger.log_final_state();
@@ -62,7 +62,7 @@ void Sorter::sort_non_verbose()
 		phases++;
 	} while (series > 1);
 	
-	size_t th_phases = std::ceil(std::log2(initial_series));
+	size_t th_phases = std::ceil(std::log2(initial_series)/std::log2(tapes));
 	size_t th_disc_ops = 4 * initial_records * th_phases / buffer_size;
 
 	console_logger.log_sorting_information(phases, th_phases, th_disc_ops);
