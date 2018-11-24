@@ -54,8 +54,11 @@ void ConsoleLogger::log_tape_with_name(std::string const & tape_path,
 	file_displayer.display(tape_path, sorter->buffer_size);
 }
 
-void ConsoleLogger::log_sorting_information(size_t phases, size_t th_phases, size_t th_disc_ops) const
+void ConsoleLogger::log_sorting_information(size_t phases) const
 {
+	size_t th_phases = std::ceil(std::log2(sorter->initial_series) / std::log2(sorter->tapes));
+	size_t th_disc_ops = 4 * sorter->initial_records * th_phases / sorter->buffer_size;
+
 	std::cout << "============ SORT INFORMATION: ============" << std::endl;
 	std::cout << " initial number of records            : " << sorter->initial_records << std::endl;
 	std::cout << " initial number of series             : " << sorter->initial_series << std::endl;

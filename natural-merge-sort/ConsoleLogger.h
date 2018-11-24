@@ -35,7 +35,7 @@ public:
 	/**
 	* Displays sort information.
 	*/
-	void log_sorting_information(size_t phases, size_t th_phases, size_t th_disc_ops) const;
+	void log_sorting_information(size_t phases) const;
 
 private:
 
